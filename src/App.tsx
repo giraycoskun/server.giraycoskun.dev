@@ -1,4 +1,4 @@
-import { Github, Linkedin, FileText, Globe } from "lucide-react";
+import { Github, Linkedin, FileText } from "lucide-react";
 import appData from "./data/data.tsx";
 import { useState, useEffect } from "react";
 import { checkMultipleUrls, getStatusLabel, getStatusColorClasses } from "./util/check.tsx";

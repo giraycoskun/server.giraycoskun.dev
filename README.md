@@ -1,10 +1,16 @@
 # Server Home Page
 
+## Build
+
+```bash
+```
+
+
+## Nginx Conf
+
 ```bash
 sudo cp nginx.conf /etc/nginx/sites-available/default
 ```
-
-## Nginx Conf
 
 ```bash
 sudo nginx -t

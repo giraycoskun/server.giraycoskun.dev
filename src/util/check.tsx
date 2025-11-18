@@ -9,14 +9,14 @@ export async function checkUrlStatus(url: string): Promise<boolean> {
 
     const response = await fetch(url, {
       method: 'HEAD',
-      mode: 'no-cors', // Allow cross-origin requests
+      // mode: 'no-cors', // Allow cross-origin requests
       signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
 
-    // With 'no-cors', we can't read the status, so we assume success if no error
-    return true;
+    // Check if status code is in the 200s range
+    return response.ok; // response.ok is true for status 200-299
   } catch (error) {
     return false;
   }
