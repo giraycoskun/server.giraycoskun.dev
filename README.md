@@ -15,4 +15,5 @@ sudo systemctl status nginx
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
 ```
