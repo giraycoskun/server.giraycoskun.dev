@@ -1,0 +1,42 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "title": "Jellyfin",
+      "description": "",
+      "url": "http://192.168.0.81:8096",
+      "status": "Running",
+      "icon": "jellyfin-icon.svg"
+    },
+    {
+      "id": 2,
+      "title": "Wanderer",
+      "description": "Trails",
+      "url": "http://192.168.0.81:3001/",
+      "status": "Running"
+    },
+    {
+      "id": 3,
+      "title": "Linkding",
+      "description": "Bookmark manager",
+      "url": "http://192.168.0.81:9091/",
+      "status": "Running"
+    },
+    {
+      "id": 4,
+      "title": "Uptime Kuma",
+      "description": "Self-hosted monitoring tool",
+      "url": "http://192.168.0.81:3002/dashboard",
+      "status": "Running"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Personal Blog",
+      "description": "",
+      "url": "https://giraycoskun.com",
+      "status": "Active"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "title": "Jellyfin",
+      "description": "Open-source media server for streaming movies, TV shows, and music.",
+      "url": "https://jelly.giraycoskun.com",
+      "status": "Running",
+      "icon": "jellyfin-icon.svg"
+    },
+    {
+      "id": 2,
+      "title": "Wanderer",
+      "description": "Self-hosted trail and outdoor activity tracking application.",
+      "url": "https://trails.giraycoskun.com",
+      "status": "Running"
+    },
+    {
+      "id": 3,
+      "title": "Uptime Kuma Status",
+      "description": "Self-hosted monitoring tool",
+      "url": "https://server.giraycoskun.dev/status",
+      "status": "Running"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Personal Blog",
+      "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
+      "url": "https://giraycoskun.com",
+      "status": "Active"
+    }
+  ]
+}
