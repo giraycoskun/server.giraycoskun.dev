@@ -1,7 +1,7 @@
 # Server Home Page
 
 ```bash
-sudo cp nginx.conf /etc/nginx/sites-available/server.giraycoskun.dev
+sudo cp nginx.conf /etc/nginx/sites-available/default
 ```
 
 ## Nginx Conf
