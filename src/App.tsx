@@ -104,14 +104,14 @@ export default function HomeServerLanding() {
                 <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
 
                 {/* Shine effect (subtle) */}
-                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <img
                       src={service.icon ?? `/service-icon.svg`}
                       alt={`${service.title} icon`}
-                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain flex-shrink-0"
+                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain shrink-0"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src =
                           "/icons/default-project.svg";
@@ -134,7 +134,7 @@ export default function HomeServerLanding() {
                       Open Service →
                     </a>
                     <span className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}>
-                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block flex-shrink-0`} />
+                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`} />
                       {statusLabel}
                     </span>
                   </div>
@@ -170,14 +170,14 @@ export default function HomeServerLanding() {
                 <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
 
                 {/* Shine effect (subtle) */}
-                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <img
                       src={project.icon ?? `/project-icon.svg`}
                       alt={`${project.title} icon`}
-                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain flex-shrink-0"
+                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain shrink-0"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src =
                           "/icons/default-project.svg";
@@ -200,7 +200,7 @@ export default function HomeServerLanding() {
                       Open Project →
                     </a>
                     <span className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}>
-                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block flex-shrink-0`} />
+                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`} />
                       {statusLabel}
                     </span>
                   </div>
