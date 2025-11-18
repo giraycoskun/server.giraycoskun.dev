@@ -1,23 +1,27 @@
 /**
  * Check if a service/project URL is reachable.
- * Returns true if the URL responds with a successful status, false otherwise.
+ * Returns true if the URL responds (even with CORS restrictions), false on network errors.
+ * Note: With 'no-cors' mode, we cannot read HTTP status codes due to browser security.
+ * This only detects if the service is reachable at the network level.
  */
 export async function checkUrlStatus(url: string): Promise<boolean> {
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-    const response = await fetch(url, {
-      method: 'HEAD',
-      // mode: 'no-cors', // Allow cross-origin requests
+    await fetch(url, {
+      method: 'GET', // Changed to GET as some servers don't support HEAD
+      mode: 'no-cors', // Required to avoid CORS errors
       signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
 
-    // Check if status code is in the 200s range
-    return response.ok; // response.ok is true for status 200-299
+    // With 'no-cors', response.type will be 'opaque'
+    // We can't read status, but if fetch succeeds, the server is reachable
+    return true;
   } catch (error) {
+    // Network error, timeout, or DNS failure
     return false;
   }
 }
