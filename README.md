@@ -14,5 +14,5 @@ sudo systemctl status nginx
 ```
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/server.giraycoskun.dev /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 ```
