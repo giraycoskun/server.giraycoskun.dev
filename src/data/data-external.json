@@ -17,9 +17,16 @@
     },
     {
       "id": 3,
-      "title": "Uptime Kuma Status",
-      "description": "Self-hosted monitoring tool",
-      "url": "https://server.giraycoskun.dev/status",
+      "title": "Status",
+      "description": "Betterstack status page for monitoring service uptime.",
+      "url": "https://status.giraycoskun.dev/",
+      "status": "Running"
+    },
+    {
+      "id": 4,
+      "title": "Uptime Kuma",
+      "description": "Self-hosted monitoring tool for tracking website and service uptime.",
+      "url": "https://uptime.giraycoskun.dev",
       "status": "Running"
     }
   ],

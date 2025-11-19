@@ -28,6 +28,13 @@
       "description": "Self-hosted monitoring tool",
       "url": "http://192.168.0.81:3002/dashboard",
       "status": "Running"
+    },
+    {
+      "id": 5,
+      "title": "Grafana",
+      "description": "Self-hosted monitoring tool",
+      "url": "http://192.168.0.81:3002/dashboard",
+      "status": "Running"
     }
   ],
   "projects": [

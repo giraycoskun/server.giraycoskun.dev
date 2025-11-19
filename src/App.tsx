@@ -2,8 +2,10 @@ import { Github, Linkedin, FileText } from "lucide-react";
 import appData from "./data/data.tsx";
 import { useState, useEffect } from "react";
 import { checkMultipleUrls, getStatusLabel, getStatusColorClasses } from "./util/check.tsx";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import BashCommandsPage from "./pages/commands.tsx";
 
-export default function HomeServerLanding() {
+function HomeServerLanding() {
   const [urlStatuses, setUrlStatuses] = useState<Map<string, boolean>>(new Map());
 
   useEffect(() => {
@@ -78,6 +80,16 @@ export default function HomeServerLanding() {
           })}
         </div>
 
+        {/* Internal Pages Link */}
+        <div className="flex justify-center mb-10">
+          <Link
+            to="/commands"
+            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            📖 Bash Commands Reference
+          </Link>
+        </div>
+
         {/* separator between services and projects */}
         <div className="flex items-center justify-center my-10">
           <div className="h-px bg-white/10 flex-1" />
@@ -130,6 +142,7 @@ export default function HomeServerLanding() {
                       href={service.url}
                       onClick={(e) => e.stopPropagation()}
                       className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
+                      style={{ color: '#ffffff' }}
                     >
                       Open Service →
                     </a>
@@ -196,6 +209,7 @@ export default function HomeServerLanding() {
                       href={project.url}
                       onClick={(e) => e.stopPropagation()}
                       className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
+                      style={{ color: '#ffffff' }}
                     >
                       Open Project →
                     </a>
@@ -229,5 +243,16 @@ export default function HomeServerLanding() {
         .animate-fade-in-up { animation: fadeInUp 0.9s ease 0.35s both; }
       `}</style>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomeServerLanding />} />
+        <Route path="/commands" element={<BashCommandsPage />} />
+      </Routes>
+    </Router>
   );
 }
