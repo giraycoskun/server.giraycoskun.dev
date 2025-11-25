@@ -34,11 +34,13 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
+User=giraycoskun
 WorkingDirectory=/home/giraycoskun/Code/server.giraycoskun.dev/src/server
-ExecStart=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin/pnpm node server.js
+ExecStart=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin/pnpm start
 Restart=always
 
+Environment="PATH=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin:/usr/local/bin:/usr/bin:/bin"
+Environment=WEBHOOK_SECRET=<WEBHOOK_SECRET_VALUE>
 
 [Install]
 WantedBy=multi-user.target
@@ -49,5 +51,7 @@ sudo systemctl daemon-reload
 sudo systemctl start server-webhook
 sudo systemctl enable server-webhook
 sudo systemctl status server-webhook
-journalctl -u server-webhook
+journalctl -u server-webhook.service
+journalctl -xeu server-webhook.service
+journalctl -u server-webhook.service -n 15 -f
 ```

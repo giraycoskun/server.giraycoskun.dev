@@ -50,5 +50,6 @@ app.get("/webhook/health", (_req, res) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
 
+console.log("Current working directory:", process.cwd());
 app.listen(PORT, () => console.log(`Webhook server running on port ${PORT}`));
 //export WEBHOOK_SECRET="your-actual-secret"
