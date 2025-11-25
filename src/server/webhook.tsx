@@ -18,19 +18,37 @@ app.use(express.json({
 
 function verifySignature(req: express.Request & { rawBody?: Buffer }) {
   const signature = req.headers["x-hub-signature-256"] as string | undefined;
-  if (!signature) return false;
+
+  if (!signature) {
+    console.log("No signature header found");
+    return false;
+  }
+
+  if (!req.rawBody) {
+    console.log("No raw body found");
+    return false;
+  }
 
   const hmac = crypto.createHmac("sha256", SECRET);
-  hmac.update(req.rawBody!);
+  hmac.update(req.rawBody);
   const digest = "sha256=" + hmac.digest("hex");
 
-  return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+  const isValid = crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+  console.log("Signature validation:", isValid);
+
+  return isValid;
 }
 
 app.post("/webhook", (req, res) => {
+  console.log("Received webhook request");
+  console.log("Headers:", req.headers);
+
   if (!verifySignature(req)) {
+    console.log("Invalid signature - rejecting request");
     return res.status(403).send("Invalid signature");
   }
+
+  console.log("Valid signature - executing deploy script");
 
   // Run deploy script
   exec("./deploy.sh", (err, stdout, stderr) => {
@@ -39,8 +57,8 @@ app.post("/webhook", (req, res) => {
       console.error(`Error executing deploy script: ${err}`);
       return;
     }
-    console.log(stdout);
-    console.log(stderr);
+    console.log("STDOUT:", stdout);
+    if (stderr) console.log("STDERR:", stderr);
   });
 
   res.send("OK");
