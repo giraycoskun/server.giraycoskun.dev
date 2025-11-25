@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build:local": "tsc -b && vite build --outDir dist-local",
     "build:external": "tsc -b && vite build --mode external --outDir dist-external",
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "tsx src/server/webhook.tsx"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

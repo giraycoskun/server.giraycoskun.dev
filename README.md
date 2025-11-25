@@ -34,11 +34,20 @@ After=network.target
 
 [Service]
 Type=simple
+User=www-data
 WorkingDirectory=/home/giraycoskun/Code/server.giraycoskun.dev/src/server
-ExecStart=/usr/bin/pnpm node server.js
+ExecStart=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin/pnpm node server.js
 Restart=always
-User=giraycoskun
+
 
 [Install]
 WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start server-webhook
+sudo systemctl enable server-webhook
+sudo systemctl status server-webhook
+journalctl -u server-webhook
 ```
