@@ -12,6 +12,4 @@ pnpm build:local
 echo "--- Building project with external ---"
 pnpm build:external
 
-echo "--- Restarting server ---"
-# If you use something like pm2:
-s
+echo "--- Server is Updated ---"
