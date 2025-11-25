@@ -51,7 +51,7 @@ app.post("/webhook", (req, res) => {
   console.log("Valid signature - executing deploy script");
 
   // Run deploy script
-  exec("./deploy.sh", (err, stdout, stderr) => {
+  exec("./src/server/deploy.sh", (err, stdout, stderr) => {
     console.log("Deploy script executed.");
     if (err) {
       console.error(`Error executing deploy script: ${err}`);
