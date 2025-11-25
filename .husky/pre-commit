@@ -1,0 +1,7 @@
+# .husky/pre-commit
+
+# 1. Run the build
+pnpm run build:local
+
+# 2. Build with external
+pnpm run build:external

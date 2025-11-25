@@ -5,21 +5,26 @@
       "title": "Jellyfin",
       "description": "",
       "url": "http://192.168.0.81:8096",
+      "external": "https://github.com/jellyfin/jellyfin",
       "status": "Running",
-      "icon": "jellyfin-icon.svg"
+      "icon": "jellyfin.svg"
     },
     {
       "id": 2,
       "title": "Wanderer",
       "description": "Trails",
+      "external": "https://github.com/Flomp/wanderer",
       "url": "http://192.168.0.81:3001/",
+      "icon": "wanderer.svg",
       "status": "Running"
     },
     {
       "id": 3,
       "title": "Linkding",
       "description": "Bookmark manager",
+      "external": "https://github.com/sissbruecker/linkding",
       "url": "http://192.168.0.81:9091/",
+      "icon": "linkding.svg",
       "status": "Running"
     },
     {
@@ -27,13 +32,26 @@
       "title": "Uptime Kuma",
       "description": "Self-hosted monitoring tool",
       "url": "http://192.168.0.81:3002/dashboard",
-      "status": "Running"
+      "external": "https://github.com/louislam/uptime-kuma",
+      "status": "Running",
+      "icon": "uptime-kuma.svg"
     },
     {
       "id": 5,
       "title": "Grafana",
       "description": "Self-hosted monitoring tool",
+      "external": "https://github.com/grafana/grafana",
       "url": "http://192.168.0.81:3002/dashboard",
+      "icon": "grafana.svg",
+      "status": "Running"
+    },
+    {
+      "id": 6,
+      "title": "Portrainer",
+      "description": "Self-hosted container management tool",
+      "external": "https://github.com/portainer/portainer",
+      "url": "http://192.168.0.81:9443",
+      "icon": "portainer.svg",
       "status": "Running"
     }
   ],
@@ -41,7 +59,7 @@
     {
       "id": 1,
       "title": "Personal Blog",
-      "description": "",
+      "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
       "url": "https://giraycoskun.com",
       "status": "Active"
     }

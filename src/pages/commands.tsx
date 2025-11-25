@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Copy, Check, Terminal } from 'lucide-react';
+import { Search, Copy, Check, Terminal, ExternalLink, Home } from 'lucide-react';
 
 interface Example {
   code: string;
@@ -13,7 +13,7 @@ interface Command {
   syntax: string;
   description: string;
   examples: Example[];
-  tags: string[];
+  link?: string;
 }
 
 interface Category {
@@ -38,49 +38,9 @@ const BashCommandsPage: React.FC = () => {
         { code: 'ls -lh', desc: 'List with human-readable sizes' },
         { code: 'ls -lt', desc: 'Sort by modification time' }
       ],
-      tags: ['beginner']
     },
     {
       id: 2,
-      category: 'files',
-      command: 'cd',
-      syntax: 'cd [path]',
-      description: 'Change directory',
-      examples: [
-        { code: 'cd ~', desc: 'Go to home directory' },
-        { code: 'cd ..', desc: 'Go up one directory' },
-        { code: 'cd -', desc: 'Go to previous directory' }
-      ],
-      tags: ['beginner']
-    },
-    {
-      id: 3,
-      category: 'files',
-      command: 'cp',
-      syntax: 'cp [options] source dest',
-      description: 'Copy files or directories',
-      examples: [
-        { code: 'cp file.txt backup.txt', desc: 'Copy a file' },
-        { code: 'cp -r dir1 dir2', desc: 'Copy directory recursively' },
-        { code: 'cp -i file.txt dest/', desc: 'Interactive copy (prompt before overwrite)' }
-      ],
-      tags: ['beginner']
-    },
-    {
-      id: 4,
-      category: 'files',
-      command: 'mv',
-      syntax: 'mv [options] source dest',
-      description: 'Move or rename files',
-      examples: [
-        { code: 'mv old.txt new.txt', desc: 'Rename a file' },
-        { code: 'mv file.txt /path/to/dir/', desc: 'Move file to directory' },
-        { code: 'mv -i *.txt backup/', desc: 'Move with confirmation' }
-      ],
-      tags: ['beginner']
-    },
-    {
-      id: 5,
       category: 'files',
       command: 'rm',
       syntax: 'rm [options] file',
@@ -89,37 +49,22 @@ const BashCommandsPage: React.FC = () => {
         { code: 'rm file.txt', desc: 'Delete a file' },
         { code: 'rm -r directory/', desc: 'Delete directory recursively' },
         { code: 'rm -f file.txt', desc: 'Force delete without prompt' }
-      ],
-      tags: ['dangerous']
+      ]
     },
     {
-      id: 6,
-      category: 'text',
-      command: 'grep',
-      syntax: 'grep [options] pattern [file]',
-      description: 'Search text patterns in files',
+      id: 3,
+      category: 'video',
+      command: 'ffmpeg',
+      syntax: 'ffmpeg [options] input_file output_file',
+      description: 'Convert, stream, and manipulate multimedia files',
       examples: [
-        { code: 'grep "error" log.txt', desc: 'Search for text in file' },
-        { code: 'grep -r "TODO" .', desc: 'Recursive search in directory' },
-        { code: 'grep -i "warning" file.txt', desc: 'Case-insensitive search' }
-      ],
-      tags: ['beginner']
+        { code: 'ffmpeg -i input.mp4 output.avi', desc: 'Convert MP4 to AVI' },
+        { code: 'ffmpeg -i input.mp4 -vf "scale=640:480" output.mp4', desc: 'Resize video' },
+        { code: 'ffmpeg -protocol_whitelist file,crypto,data,http,https,tls,tcp -i "http://example.com/stream/playlist.m3u8" -c copy -bsf:a aac_adtstoasc video.mp4', desc: 'Download HLS stream' }
+      ]
     },
     {
-      id: 7,
-      category: 'text',
-      command: 'cat',
-      syntax: 'cat [options] [file]',
-      description: 'Display file contents',
-      examples: [
-        { code: 'cat file.txt', desc: 'Display file content' },
-        { code: 'cat file1.txt file2.txt', desc: 'Concatenate files' },
-        { code: 'cat -n file.txt', desc: 'Display with line numbers' }
-      ],
-      tags: ['beginner']
-    },
-    {
-      id: 8,
+      id: 4,
       category: 'text',
       command: 'sed',
       syntax: 'sed [options] script [file]',
@@ -128,12 +73,11 @@ const BashCommandsPage: React.FC = () => {
         { code: 'sed \'s/old/new/g\' file.txt', desc: 'Replace text' },
         { code: 'sed -i \'s/foo/bar/g\' file.txt', desc: 'Replace in-place' },
         { code: 'sed -n \'10,20p\' file.txt', desc: 'Print lines 10-20' }
-      ],
-      tags: ['advanced']
+      ]
     },
     {
-      id: 9,
-      category: 'system',
+      id: 5,
+      category: 'process',
       command: 'ps',
       syntax: 'ps [options]',
       description: 'Display running processes',
@@ -141,12 +85,11 @@ const BashCommandsPage: React.FC = () => {
         { code: 'ps aux', desc: 'List all processes' },
         { code: 'ps aux | grep nginx', desc: 'Find specific process' },
         { code: 'ps -ef', desc: 'Full format listing' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
-      id: 10,
-      category: 'system',
+      id: 6,
+      category: 'process',
       command: 'top',
       syntax: 'top [options]',
       description: 'Display real-time system processes',
@@ -154,8 +97,7 @@ const BashCommandsPage: React.FC = () => {
         { code: 'top', desc: 'Interactive process viewer' },
         { code: 'top -u username', desc: 'Show processes for user' },
         { code: 'top -n 1', desc: 'Run once and exit' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
       id: 11,
@@ -167,8 +109,7 @@ const BashCommandsPage: React.FC = () => {
         { code: 'df -h', desc: 'Human-readable disk space' },
         { code: 'df -i', desc: 'Show inode information' },
         { code: 'df -T', desc: 'Show filesystem types' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
       id: 12,
@@ -180,50 +121,22 @@ const BashCommandsPage: React.FC = () => {
         { code: 'du -sh *', desc: 'Summary of all items' },
         { code: 'du -h --max-depth=1', desc: 'Show first level only' },
         { code: 'du -ah | sort -rh | head -20', desc: 'Top 20 largest files' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
       id: 13,
       category: 'network',
-      command: 'curl',
-      syntax: 'curl [options] [URL]',
-      description: 'Transfer data from or to a server',
+      command: 'ss',
+      syntax: 'ss [options]',
+      description: 'Display socket statistics',
       examples: [
-        { code: 'curl https://api.example.com', desc: 'GET request' },
-        { code: 'curl -X POST -d "data" url', desc: 'POST with data' },
-        { code: 'curl -I https://example.com', desc: 'Fetch headers only' }
+        { code: 'ss -tuln', desc: 'List all listening TCP/UDP ports' },
+        { code: 'ss -tulnp | grep :PORT', desc: 'To check if a port is in use' },
       ],
-      tags: ['beginner']
+      link: "https://man7.org/linux/man-pages/man8/ss.8.html"
     },
     {
       id: 14,
-      category: 'network',
-      command: 'wget',
-      syntax: 'wget [options] [URL]',
-      description: 'Download files from the web',
-      examples: [
-        { code: 'wget https://example.com/file.zip', desc: 'Download file' },
-        { code: 'wget -c url', desc: 'Resume interrupted download' },
-        { code: 'wget -r -np url', desc: 'Recursive download' }
-      ],
-      tags: ['beginner']
-    },
-    {
-      id: 15,
-      category: 'network',
-      command: 'netstat',
-      syntax: 'netstat [options]',
-      description: 'Network statistics and connections',
-      examples: [
-        { code: 'netstat -tuln', desc: 'Show listening ports' },
-        { code: 'netstat -an', desc: 'All connections and ports' },
-        { code: 'netstat -r', desc: 'Show routing table' }
-      ],
-      tags: ['advanced']
-    },
-    {
-      id: 16,
       category: 'permissions',
       command: 'chmod',
       syntax: 'chmod [options] mode file',
@@ -232,11 +145,10 @@ const BashCommandsPage: React.FC = () => {
         { code: 'chmod 755 script.sh', desc: 'Make file executable' },
         { code: 'chmod +x file.sh', desc: 'Add execute permission' },
         { code: 'chmod -R 644 dir/', desc: 'Recursive permission change' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
-      id: 17,
+      id: 15,
       category: 'permissions',
       command: 'chown',
       syntax: 'chown [options] user:group file',
@@ -245,24 +157,10 @@ const BashCommandsPage: React.FC = () => {
         { code: 'chown user file.txt', desc: 'Change owner' },
         { code: 'chown user:group file.txt', desc: 'Change owner and group' },
         { code: 'chown -R user:group dir/', desc: 'Recursive ownership change' }
-      ],
-      tags: ['advanced']
+      ]
     },
     {
-      id: 18,
-      category: 'text',
-      command: 'awk',
-      syntax: 'awk [options] \'pattern {action}\' file',
-      description: 'Pattern scanning and text processing',
-      examples: [
-        { code: 'awk \'{print $1}\' file.txt', desc: 'Print first column' },
-        { code: 'awk \'/pattern/ {print $0}\' file', desc: 'Print matching lines' },
-        { code: 'awk -F: \'{print $1}\' /etc/passwd', desc: 'Use custom delimiter' }
-      ],
-      tags: ['advanced']
-    },
-    {
-      id: 19,
+      id: 16,
       category: 'files',
       command: 'find',
       syntax: 'find [path] [options]',
@@ -271,12 +169,11 @@ const BashCommandsPage: React.FC = () => {
         { code: 'find . -name "*.txt"', desc: 'Find files by name' },
         { code: 'find . -type f -mtime -7', desc: 'Files modified in last 7 days' },
         { code: 'find . -size +100M', desc: 'Files larger than 100MB' }
-      ],
-      tags: ['beginner']
+      ]
     },
     {
-      id: 20,
-      category: 'system',
+      id: 17,
+      category: 'process',
       command: 'kill',
       syntax: 'kill [options] pid',
       description: 'Send signal to process',
@@ -284,18 +181,30 @@ const BashCommandsPage: React.FC = () => {
         { code: 'kill 1234', desc: 'Terminate process by PID' },
         { code: 'kill -9 1234', desc: 'Force kill process' },
         { code: 'killall process_name', desc: 'Kill all processes by name' }
-      ],
-      tags: ['dangerous']
+      ]
+    },
+    {
+      id: 18,
+      category: 'process',
+      command: 'nohup',
+      syntax: 'nohup command [args] &',
+      description: 'Run command immune to hangups',
+      examples: [
+        { code: 'nohup myscript.sh &', desc: 'Run script in background' },
+      ]
     }
   ];
 
   const categories: Category[] = [
     { id: 'all', name: 'All Commands' },
     { id: 'files', name: 'Files' },
-    { id: 'text', name: 'Text Processing' },
-    { id: 'system', name: 'System' },
+    { id: 'video', name: 'Video Processing' },
     { id: 'network', name: 'Network' },
-    { id: 'permissions', name: 'Permissions' }
+    { id: 'process', name: 'Process Management' },
+    { id: 'system', name: 'System' },
+    { id: 'docker', name: 'Docker' },
+    { id: 'tmux', name: 'Tmux' },
+    { id: 'vim', name: 'Vim' },
   ];
 
   const filteredCommands = useMemo(() => {
@@ -315,23 +224,23 @@ const BashCommandsPage: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const getTagColor = (tag: string): string => {
-    switch(tag) {
-      case 'beginner': return 'bg-green-100 text-green-700';
-      case 'advanced': return 'bg-purple-100 text-purple-700';
-      case 'dangerous': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gray-900 text-white py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <Terminal className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Bash Commands Reference</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Terminal className="w-8 h-8" />
+              <h1 className="text-3xl font-bold">Bash Commands Reference</h1>
+            </div>
+            <a
+              href="/"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              <Home className="w-5 h-5" />
+              <span>Home</span>
+            </a>
           </div>
           <p className="text-gray-400">Quick reference for commonly used bash commands</p>
         </div>
@@ -360,7 +269,7 @@ const BashCommandsPage: React.FC = () => {
               onClick={() => setActiveCategory(cat.id)}
               className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
                 activeCategory === cat.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-gray-400'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -378,11 +287,17 @@ const BashCommandsPage: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <code className="text-lg font-bold text-gray-900">{cmd.command}</code>
-                    {cmd.tags.map(tag => (
-                      <span key={tag} className={`text-xs px-2 py-0.5 rounded-full ${getTagColor(tag)}`}>
-                        {tag}
-                      </span>
-                    ))}
+                    {cmd.link && (
+                      <a
+                        href={cmd.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                        title="View documentation"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
                   </div>
                   <p className="text-sm text-gray-600">{cmd.description}</p>
                 </div>

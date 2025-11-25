@@ -6,27 +6,23 @@
       "description": "Open-source media server for streaming movies, TV shows, and music.",
       "url": "https://jelly.giraycoskun.com",
       "status": "Running",
-      "icon": "jellyfin-icon.svg"
+      "icon": "jellyfin.svg",
+      "external": "https://github.com/jellyfin/jellyfin"
     },
     {
       "id": 2,
       "title": "Wanderer",
       "description": "Self-hosted trail and outdoor activity tracking application.",
+      "external": "https://github.com/Flomp/wanderer",
       "url": "https://trails.giraycoskun.com",
-      "status": "Running"
-    },
-    {
-      "id": 3,
-      "title": "Status",
-      "description": "Betterstack status page for monitoring service uptime.",
-      "url": "https://status.giraycoskun.dev/",
+      "icon": "wanderer.svg",
       "status": "Running"
     },
     {
       "id": 4,
       "title": "Uptime Kuma",
       "description": "Self-hosted monitoring tool for tracking website and service uptime.",
-      "url": "https://uptime.giraycoskun.dev",
+      "url": "https://uptime.giraycoskun.dev/status/services",
       "status": "Running"
     }
   ],

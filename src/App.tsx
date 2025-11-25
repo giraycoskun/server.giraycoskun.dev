@@ -1,4 +1,4 @@
-import { Github, Linkedin, FileText } from "lucide-react";
+import { Github, Linkedin, FileText, ExternalLink } from "lucide-react";
 import appData from "./data/data.tsx";
 import { useState, useEffect } from "react";
 import { checkMultipleUrls, getStatusLabel, getStatusColorClasses } from "./util/check.tsx";
@@ -80,16 +80,6 @@ function HomeServerLanding() {
           })}
         </div>
 
-        {/* Internal Pages Link */}
-        <div className="flex justify-center mb-10">
-          <Link
-            to="/commands"
-            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
-          >
-            📖 Bash Commands Reference
-          </Link>
-        </div>
-
         {/* separator between services and projects */}
         <div className="flex items-center justify-center my-10">
           <div className="h-px bg-white/10 flex-1" />
@@ -129,9 +119,21 @@ function HomeServerLanding() {
                           "/icons/default-project.svg";
                       }}
                     />
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
                       {service.title}
                     </h3>
+                    {service.external && (
+                      <a
+                        href={service.external}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-white/70 hover:text-white transition-colors z-20"
+                        title="View external link"
+                      >
+                        <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </a>
+                    )}
                   </div>
                   <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed mb-3 sm:mb-4 lg:mb-5">
                     {service.description}
@@ -196,9 +198,21 @@ function HomeServerLanding() {
                           "/icons/default-project.svg";
                       }}
                     />
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
                       {project.title}
-                    </h3>
+                    </h3> 
+                    {project.external && (
+                      <a
+                        href={project.external}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-white/70 hover:text-white transition-colors z-20"
+                        title="View external link"
+                      >
+                        <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                      </a>
+                    )}
                   </div>
                   <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed mb-3 sm:mb-4 lg:mb-5">
                     {project.description}
@@ -223,6 +237,17 @@ function HomeServerLanding() {
             );
           })}
         </div>
+
+        {/* Internal Pages Link */}
+        <div className="flex justify-end right-0 mt-20 mr-10">
+          <Link
+            to="/commands"
+            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            📖 Bash Commands Reference
+          </Link>
+        </div>
+
       </div>
 
       <style>{`

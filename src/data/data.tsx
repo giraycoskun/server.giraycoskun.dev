@@ -2,6 +2,7 @@ type Service = {
   id: number;
   title: string;
   description?: string;
+  external?: string;
   url: string;
   status?: string;
   icon?: string;
@@ -15,6 +16,7 @@ type Project = {
   id: number;
   title: string;
   description?: string;
+  external?: string;
   url: string;
   status?: string;
   icon?: string;
