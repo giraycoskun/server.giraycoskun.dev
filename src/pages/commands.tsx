@@ -192,6 +192,69 @@ const BashCommandsPage: React.FC = () => {
       examples: [
         { code: 'nohup myscript.sh &', desc: 'Run script in background' },
       ]
+    },
+    {
+      id: 19,
+      category: 'vim',
+      command: 'vim :1,$d',
+      syntax: ':1,$d',
+      description: 'Select and Delete all lines in the file',
+      examples: [
+        { code: ':1,$d', desc: 'Delete all lines from line 1 to the end' },
+      ]
+    },
+    {
+      id: 20,
+      category: 'process',
+      command: 'nginx -t',
+      syntax: 'nginx -t',
+      description: 'Test Nginx configuration for syntax errors',
+      examples: [
+        { code: 'nginx -t', desc: 'Check Nginx config syntax' },
+        { code: 'sudo nginx -t && sudo systemctl reload nginx', desc: 'Reload Nginx after config changes' },
+      ]
+    },
+    {
+      id: 21,
+      category: 'process',
+      command: 'systemctl reload <service>',
+      syntax: 'systemctl reload <service>',
+      description: 'Reload systemd service without downtime',
+      examples: [
+        { code: 'systemctl reload nginx', desc: 'Reload Nginx service' },
+      ]
+    },
+    {
+      id: 22,
+      category: 'process',
+      command: 'systemctl status <service>',
+      syntax: 'systemctl status <service>',
+      description: 'Check the status of a systemd service',
+      examples: [
+        { code: 'systemctl status nginx', desc: 'Check Nginx service status' },
+      ]
+    },
+    {
+      id: 23,
+      category: 'tmux',
+      command: 'tmux',
+      syntax: 'tmux [options]',
+      description: 'Terminal multiplexer to manage multiple terminal sessions',
+      examples: [
+        { code: 'tmux new -s session_name', desc: 'Create a new tmux session' },
+        { code: 'tmux attach -t session_name', desc: 'Attach to an existing session' },
+        { code: 'tmux ls', desc: 'List all tmux sessions' }
+      ]
+    },
+    {
+      id: 24,
+      category: 'tmux',
+      command: 'Ctrl+b c',
+      syntax: 'Ctrl+b c',
+      description: 'Create a new tmux window',
+      examples: [
+        { code: 'Ctrl+b c', desc: 'Create a new window in current session' },
+      ]
     }
   ];
 
@@ -262,7 +325,7 @@ const BashCommandsPage: React.FC = () => {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2">
           {categories.map(cat => (
             <button
               key={cat.id}
