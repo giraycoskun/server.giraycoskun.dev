@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "--- Pulling latest changes ---"
-git pull origin main
+git pull https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com:giraycoskun/server.giraycoskun.dev.git
 
 echo "--- Installing deps ---"
 pnpm install
