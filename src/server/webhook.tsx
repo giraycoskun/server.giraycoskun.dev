@@ -52,9 +52,9 @@ app.post("/webhook", (req, res) => {
 
   // Run deploy script
   exec("./src/server/build.sh", (err, stdout, stderr) => {
-    console.log("Deploy script executed.");
+    console.log("Build script executed.");
     if (err) {
-      console.error(`Error executing deploy script: ${err}`);
+      console.error(`Error executing build script: ${err}`);
       return;
     }
     console.log("STDOUT:", stdout);
