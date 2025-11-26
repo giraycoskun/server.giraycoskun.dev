@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e  # Exit immediately if any command fails
 
+echo "--- Fetching latest changes ---"
+git fetch https://${GITHUB_TOKEN}@github.com/giraycoskun/server.giraycoskun.dev.git main
+
 echo "--- Pulling latest changes ---"
 git pull https://${GITHUB_TOKEN}@github.com/giraycoskun/server.giraycoskun.dev.git main
 
