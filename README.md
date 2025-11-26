@@ -49,6 +49,7 @@ WantedBy=multi-user.target
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl start server-webhook
+sudo systemctl restart server-webhook
 sudo systemctl enable server-webhook
 sudo systemctl status server-webhook
 journalctl -u server-webhook.service -r
