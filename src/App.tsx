@@ -34,6 +34,11 @@ function HomeServerLanding() {
       name: "CV / Resume",
       url: "/cv-18-11-2025.pdf",
       icon: FileText,
+    },
+    {
+      name: "Personal Website",
+      url: "https://giraycoskun.com",
+      icon: ExternalLink,
     }
   ];
 
