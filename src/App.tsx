@@ -59,8 +59,7 @@ function HomeServerLanding() {
             by giraycoskun
           </p>
           <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto mt-10">
-            My localhost server hosting various projects and services for
-            development and testing purposes.
+            My localhost server hosting various services for friends and family, as well as personal projects for development and testing purposes.
           </p>
         </div>
 

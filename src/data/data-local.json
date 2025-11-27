@@ -47,6 +47,13 @@
       "external": "https://github.com/portainer/portainer",
       "url": "http://192.168.0.81:9443",
       "icon": "portainer.svg"
+    },
+    {
+      "id": 7,
+      "title": "Qbittorrent",
+      "description": "Torrent client",
+      "url": "http://192.168.0.81:8081/",
+      "icon": "qBittorrent.svg"
     }
   ],
   "projects": [
