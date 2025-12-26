@@ -38,6 +38,9 @@ User=giraycoskun
 WorkingDirectory=/home/giraycoskun/Code/server.giraycoskun.dev/
 ExecStart=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin/pnpm start
 Restart=always
+# Redirect logs to a file
+StandardOutput=append:/var/log/server-webhook.log
+StandardError=inherit
 
 Environment="PATH=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin:/usr/local/bin:/usr/bin:/bin"
 EnvironmentFile=/etc/webhook-server.env
