@@ -25,6 +25,7 @@ const BashCommandsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [customInputs, setCustomInputs] = useState<Record<number, string>>({});
 
   const commands: Command[] = [
     {
@@ -402,6 +403,37 @@ const BashCommandsPage: React.FC = () => {
                     <p className="text-xs text-gray-600">{ex.desc}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* Custom Input */}
+              <div className="mt-3 space-y-1">
+                <p className="text-xs font-semibold text-gray-500 uppercase">Custom:</p>
+                <div className="relative">
+                  <textarea
+                    value={customInputs[cmd.id] || ''}
+                    onChange={(e) =>
+                      setCustomInputs((prev) => ({ ...prev, [cmd.id]: e.target.value }))
+                    }
+                    placeholder="Write your own command variant here..."
+                    rows={2}
+                    className="w-full pr-8 px-2 py-1 text-sm border border-gray-200 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      customInputs[cmd.id] &&
+                      copyToClipboard(customInputs[cmd.id], `custom-${cmd.id}`)
+                    }
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled={!customInputs[cmd.id]}
+                 >
+                    {copiedId === `custom-${cmd.id}` ? (
+                      <Check className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           ))}
