@@ -301,6 +301,45 @@ const BashCommandsPage: React.FC = () => {
       description: "List information about block devices",
       examples: [{ code: "lsblk", desc: "List all block devices" }],
     },
+    {
+      id: 27,
+      category: "files",
+      command: "ln -s",
+      syntax: "ln -s target link_name",
+      description: "Create a symbolic link to a file or directory",
+      examples: [
+        {
+          code: "ln -s /path/to/original /path/to/symlink",
+          desc: "Create a symbolic link",
+        },
+      ],
+    },
+    {
+      id: 28,
+      category: "video",
+      command: "yt-dlp",
+      syntax: "yt-dlp [options] url",
+      description: "Download videos from YouTube and other platforms",
+      examples: [
+        { code: "yt-dlp https://youtube.com/video", desc: "Download a video" },
+        {
+          code: "yt-dlp -f bestvideo+bestaudio https://youtube.com/video",
+          desc: "Download best video and audio quality",
+        },
+        {
+          code: "yt-dlp -o '%(title)s.%(ext)s' https://youtube.com/video",
+          desc: "Specify output filename format",
+        },
+        {
+          code: "yt-dlp -x --audio-format mp3 https://youtube.com/video",
+          desc: "Extract audio as MP3",
+        },
+        {
+          code: "yt-dlp --add-headers 'User-Agent: Mozilla/5.0' https://youtube.com/video",
+          desc: "Add custom headers",
+        },
+      ],
+    },
   ];
 
   const categories: Category[] = [

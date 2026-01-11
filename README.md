@@ -3,8 +3,18 @@
 ## Build
 
 ```bash
+pnpm install
+pnpm run build
 ```
 
+```bash
+pnpm build:local
+pnpm build:external
+```
+
+```bash
+pnpm dev
+```
 
 ## Nginx Conf
 

@@ -112,9 +112,11 @@
       "id": 2,
       "title": "localhost",
       "description": "This server.\nMy home server dashboard `server.giraycoskun.dev` website.",
+      "external": "https://github.com/giraycoskun/server.giraycoskun.dev",
       "url": "https://192.168.0.81/",
       "category": "nginx",
-      "port": 453
+      "port": 453,
+      "icon": "server.svg"
     }
   ]
 }
