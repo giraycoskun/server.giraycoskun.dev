@@ -6,7 +6,9 @@
       "description": "",
       "url": "http://192.168.0.81:8096",
       "external": "https://github.com/jellyfin/jellyfin",
-      "icon": "jellyfin.svg"
+      "icon": "jellyfin.svg",
+      "port": 8096,
+      "category": "systemd"
     },
     {
       "id": 2,
@@ -14,7 +16,9 @@
       "description": "Trails",
       "external": "https://github.com/Flomp/wanderer",
       "url": "http://192.168.0.81:3001/",
-      "icon": "wanderer.svg"
+      "icon": "wanderer.svg",
+      "port": 3001,
+      "category": "docker"
     },
     {
       "id": 3,
@@ -22,7 +26,9 @@
       "description": "Bookmark manager",
       "external": "https://github.com/sissbruecker/linkding",
       "url": "http://192.168.0.81:9091/",
-      "icon": "linkding.svg"
+      "icon": "linkding.svg",
+      "port": 9091,
+      "category": "docker"
     },
     {
       "id": 4,
@@ -30,7 +36,9 @@
       "description": "Self-hosted monitoring tool",
       "url": "http://192.168.0.81:3002/dashboard",
       "external": "https://github.com/louislam/uptime-kuma",
-      "icon": "uptime-kuma.svg"
+      "icon": "uptime-kuma.svg",
+      "port": 3002,
+      "category": "docker"
     },
     {
       "id": 5,
@@ -38,22 +46,59 @@
       "description": "Self-hosted monitoring tool",
       "external": "https://github.com/grafana/grafana",
       "url": "http://192.168.0.81:3000/dashboard",
-      "icon": "grafana.svg"
+      "icon": "grafana.svg",
+      "port": 3000,
+      "category": "docker"
     },
     {
       "id": 6,
       "title": "Portrainer",
       "description": "Self-hosted container management tool",
       "external": "https://github.com/portainer/portainer",
-      "url": "http://192.168.0.81:9443",
-      "icon": "portainer.svg"
+      "url": "https://192.168.0.81:9443",
+      "icon": "portainer.svg",
+      "port": 9443,
+      "category": "docker"
     },
     {
       "id": 7,
       "title": "Qbittorrent",
       "description": "Torrent client",
+      "external": "https://www.qbittorrent.org/",
       "url": "http://192.168.0.81:8081/",
-      "icon": "qBittorrent.svg"
+      "icon": "qBittorrent.svg",
+      "port": 8081,
+      "category": "systemd"
+    },
+    {
+      "id": 8,
+      "title": "Bookore",
+      "description": "Self-hosted ebook management application",
+      "external": "https://github.com/booklore-app/booklore",
+      "url": "http://192.168.0.81:6060/",
+      "icon": "bookore.svg",
+      "port": 6060,
+      "category": "docker"
+    },
+    {
+      "id": 9,
+      "title": "Crontab Guru Dashboard",
+      "description": "Self-hosted ebook management application",
+      "external": "https://github.com/booklore-app/booklore",
+      "url": "http://192.168.0.81:6060/",
+      "icon": "crontab-guru.png",
+      "port": 8084,
+      "category": "systemd"
+    },
+    {
+      "id": 10,
+      "title": "Traefik",
+      "description": "Traefik (pronounced traffic) is a modern HTTP reverse proxy and load balancer",
+      "external": "https://github.com/traefik/traefik",
+      "url": "http://192.168.0.81/dashboard/",
+      "icon": "traefik.png",
+      "port": 80,
+      "category": "docker"
     }
   ],
   "projects": [
@@ -62,6 +107,14 @@
       "title": "Personal Blog",
       "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
       "url": "https://giraycoskun.com"
+    },
+    {
+      "id": 2,
+      "title": "localhost",
+      "description": "This server.\nMy home server dashboard `server.giraycoskun.dev` website.",
+      "url": "https://192.168.0.81/",
+      "category": "nginx",
+      "port": 453
     }
   ]
 }

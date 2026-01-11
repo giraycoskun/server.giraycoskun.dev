@@ -4,23 +4,40 @@
       "id": 1,
       "title": "Jellyfin",
       "description": "Open-source media server for streaming movies, TV shows, and music.",
-      "url": "https://jelly.giraycoskun.com",
+      "url": "https://jelly.giraycoskun.dev",
       "icon": "jellyfin.svg",
-      "external": "https://github.com/jellyfin/jellyfin"
+      "external": "https://github.com/jellyfin/jellyfin",
+      "port": 8096
     },
     {
       "id": 2,
       "title": "Wanderer",
       "description": "Self-hosted trail and outdoor activity tracking application.",
       "external": "https://github.com/Flomp/wanderer",
-      "url": "https://trails.giraycoskun.com",
-      "icon": "wanderer.svg"
+      "url": "https://trails.giraycoskun.dev",
+      "icon": "wanderer.svg",
+      "port": 3001,
+      "category": "docker"
     },
     {
       "id": 4,
       "title": "Uptime Kuma",
-      "description": "Self-hosted monitoring tool for tracking website and service uptime.",
-      "url": "https://uptime.giraycoskun.dev/status/services"
+      "description": "Self-hosted monitoring tool",
+      "url": "https://uptime.giraycoskun.dev/status/services",
+      "external": "https://github.com/louislam/uptime-kuma",
+      "icon": "uptime-kuma.svg",
+      "port": 3002,
+      "category": "docker"
+    },
+    {
+      "id": 8,
+      "title": "Bookore",
+      "description": "Self-hosted ebook management application",
+      "external": "https://github.com/booklore-app/booklore",
+      "url": "https://library.giraycoskun.dev",
+      "icon": "bookore.svg",
+      "port": 6060,
+      "category": "docker"
     }
   ],
   "projects": [
@@ -29,6 +46,13 @@
       "title": "Personal Blog",
       "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
       "url": "https://giraycoskun.com"
+    },
+    {
+      "id": 2,
+      "title": "localhost",
+      "description": "This server.\nMy home server dashboard `server.giraycoskun.dev` website.",
+      "url": "https://server.giraycoskun.dev/",
+      "category": "nginx"
     }
   ]
 }

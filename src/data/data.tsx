@@ -1,11 +1,13 @@
 type Service = {
   id: number;
+  category?: string;
   title: string;
   description?: string;
   external?: string;
   url: string;
   status?: string;
   icon?: string;
+  port: number;
 };
 
 type ServicesData = {
@@ -20,6 +22,8 @@ type Project = {
   url: string;
   status?: string;
   icon?: string;
+  category?: string;
+  port?: number;
 };
 
 type ProjectsData = {
@@ -45,4 +49,5 @@ try {
   appData = (fallback && (fallback.default ?? fallback)) as AppData;
 }
 
-export default appData;
+export type { Service, Project, AppData };
+export default appData; 

@@ -1,12 +1,25 @@
 import { Github, Linkedin, FileText, ExternalLink } from "lucide-react";
 import appData from "./data/data.tsx";
 import { useState, useEffect } from "react";
-import { checkMultipleUrls, getStatusLabel, getStatusColorClasses } from "./util/check.tsx";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  checkMultipleUrls,
+  getStatusLabel,
+  getStatusColorClasses,
+} from "./util/check.tsx";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import BashCommandsPage from "./pages/commands.tsx";
+import PortMappingPage from "./pages/ports.tsx";
 
 function HomeServerLanding() {
-  const [urlStatuses, setUrlStatuses] = useState<Map<string, boolean>>(new Map());
+  const [urlStatuses, setUrlStatuses] = useState<Map<string, boolean>>(
+    new Map()
+  );
 
   useEffect(() => {
     // Collect all URLs from services and projects
@@ -39,7 +52,7 @@ function HomeServerLanding() {
       name: "Personal Website",
       url: "https://giraycoskun.com",
       icon: ExternalLink,
-    }
+    },
   ];
 
   return (
@@ -59,12 +72,13 @@ function HomeServerLanding() {
             by giraycoskun
           </p>
           <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto mt-10">
-            My localhost server hosting various services for friends and family, as well as personal projects for development and testing purposes.
+            My localhost server hosting various services for friends and family,
+            as well as personal projects for development and testing purposes.
           </p>
         </div>
 
         {/* Social Links */}
-        <div className="flex flex-col md:flex-row gap-5 justify-center mb-16 animate-fade-in">
+        <div className="flex flex-col md:flex-row gap-5 justify-center mb-10 animate-fade-in">
           {socialLinks.map((link) => {
             const Icon = link.icon;
             return (
@@ -82,6 +96,21 @@ function HomeServerLanding() {
               </a>
             );
           })}
+        </div>
+
+        <div className="flex justify-center m-10 gap-6 animate-fade-in">
+          <Link
+            to="/ports"
+            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            📍 Port Mapping
+          </Link>
+          <Link
+            to="/commands"
+            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+          >
+            📖 Bash Commands Reference
+          </Link>
         </div>
 
         {/* separator between services and projects */}
@@ -148,12 +177,16 @@ function HomeServerLanding() {
                       href={service.url}
                       onClick={(e) => e.stopPropagation()}
                       className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
-                      style={{ color: '#ffffff' }}
+                      style={{ color: "#ffffff" }}
                     >
                       Open Service →
                     </a>
-                    <span className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}>
-                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`} />
+                    <span
+                      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`}
+                      />
                       {statusLabel}
                     </span>
                   </div>
@@ -204,7 +237,7 @@ function HomeServerLanding() {
                     />
                     <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
                       {project.title}
-                    </h3> 
+                    </h3>
                     {project.external && (
                       <a
                         href={project.external}
@@ -227,12 +260,16 @@ function HomeServerLanding() {
                       href={project.url}
                       onClick={(e) => e.stopPropagation()}
                       className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
-                      style={{ color: '#ffffff' }}
+                      style={{ color: "#ffffff" }}
                     >
                       Open Project →
                     </a>
-                    <span className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}>
-                      <span className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`} />
+                    <span
+                      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`}
+                      />
                       {statusLabel}
                     </span>
                   </div>
@@ -242,16 +279,11 @@ function HomeServerLanding() {
           })}
         </div>
 
-        {/* Internal Pages Link */}
-        <div className="flex justify-end right-0 mt-20 mr-10">
-          <Link
-            to="/commands"
-            className="bg-white/12 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white font-semibold text-base flex items-center justify-center gap-3 transition transform duration-200 hover:bg-white/25 hover:-translate-y-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-white/30"
-          >
-            📖 Bash Commands Reference
-          </Link>
-        </div>
-
+        {/* separator between projects and footer
+        <div className="my-10 flex items-center justify-center">
+          <div className="h-px bg-white/10 flex-1" />
+          <div className="h-px bg-white/10 flex-1" />
+        </div> */}
       </div>
 
       <style>{`
@@ -275,12 +307,24 @@ function HomeServerLanding() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomeServerLanding />} />
         <Route path="/commands" element={<BashCommandsPage />} />
+        <Route path="/ports" element={<PortMappingPage />} />
       </Routes>
     </Router>
   );
