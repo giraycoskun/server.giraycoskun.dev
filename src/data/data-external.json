@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Jellyfin",
       "description": "Open-source media server for streaming movies, TV shows, and music.",
-      "url": "https://jelly.giraycoskun.dev",
+      "url": "https://jellyfin.giraycoskun.dev",
       "icon": "jellyfin.svg",
       "external": "https://github.com/jellyfin/jellyfin",
       "port": 8096
