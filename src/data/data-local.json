@@ -3,7 +3,7 @@
     {
       "id": 1,
       "title": "Jellyfin",
-      "description": "",
+      "description": "Jellyfin is a media streaming service",
       "url": "http://192.168.0.81:8096",
       "external": "https://github.com/jellyfin/jellyfin",
       "icon": "jellyfin.svg",
@@ -13,7 +13,7 @@
     {
       "id": 2,
       "title": "Wanderer",
-      "description": "Trails",
+      "description": "Trails and maps for hikers and adventurers",
       "external": "https://github.com/Flomp/wanderer",
       "url": "http://192.168.0.81:3001/",
       "icon": "wanderer.svg",
@@ -103,12 +103,22 @@
     {
       "id": 11,
       "title": "Kibana",
-      "description": "Kibana is a data visualization and exploration tool used for log and time-series analytics, application monitoring, and operational intelligence use cases.",
+      "description": "Kibana is a data visualization and exploration tool used for log and time-series analytics.",
       "external": "https://github.com/elastic/kibana",
       "url": "http://192.168.0.81:5601/",
       "icon": "kibana.png",
       "port": 5601,
       "category": "docker"
+    },
+    {
+      "id": 12,
+      "title": "code-server",
+      "description": "Runs Visual Studio Code on a remote server and access it through a web browser.",
+      "external": "https://github.com/coder/code-server",
+      "url": "http://192.168.0.81:8083/",
+      "icon": "code-server.png",
+      "port": 8083,
+      "category": "systemd"
     }
   ],
   "projects": [
