@@ -85,7 +85,7 @@
       "title": "Crontab Guru Dashboard",
       "description": "Self-hosted ebook management application",
       "external": "https://github.com/booklore-app/booklore",
-      "url": "http://192.168.0.81:6060/",
+      "url": "http://192.168.0.81:8084/",
       "icon": "crontab-guru.png",
       "port": 8084,
       "category": "systemd"
@@ -106,7 +106,7 @@
       "description": "Kibana is a data visualization and exploration tool used for log and time-series analytics, application monitoring, and operational intelligence use cases.",
       "external": "https://github.com/elastic/kibana",
       "url": "http://192.168.0.81:5601/",
-      "icon": "kibana.svg",
+      "icon": "kibana.png",
       "port": 5601,
       "category": "docker"
     }
