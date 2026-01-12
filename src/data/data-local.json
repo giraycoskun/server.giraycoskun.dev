@@ -99,6 +99,16 @@
       "icon": "traefik.png",
       "port": 80,
       "category": "docker"
+    },
+    {
+      "id": 11,
+      "title": "Kibana",
+      "description": "Kibana is a data visualization and exploration tool used for log and time-series analytics, application monitoring, and operational intelligence use cases.",
+      "external": "https://github.com/elastic/kibana",
+      "url": "http://192.168.0.81:5601/",
+      "icon": "kibana.svg",
+      "port": 5601,
+      "category": "docker"
     }
   ],
   "projects": [
