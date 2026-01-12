@@ -11,7 +11,7 @@ const GameDashboard: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center">
       {/* Game Container - added overflow-hidden to handle mobile resizing */}
-      <div className="w-full bg-white rounded-lg overflow-hidden border-2 border-gray-200">
+      <div className="w-full bg-gray-200 rounded-lg overflow-hidden border-2 border-gray-200">
         <DinoGame />
       </div>
       
@@ -29,10 +29,10 @@ const GameDashboard: React.FC = () => {
  */
 const NotFound: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-500 flex flex-col items-center justify-center p-4">
       
       {/* Main Card */}
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div className="w-full max-w-3xl bg-gray-200 rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         
         {/* Header Section */}
         <div className="text-center pt-10 pb-6 px-6">
@@ -43,12 +43,12 @@ const NotFound: React.FC = () => {
         </div>
 
         {/* Game Section */}
-        <div className="bg-gray-50 p-6 border-t border-b border-gray-100 flex justify-center">
+        <div className="bg-gray-100 p-6 border-t border-b border-gray-100 flex justify-center">
           <GameDashboard />
         </div>
 
         {/* Footer / Action Section */}
-        <div className="p-8 text-center bg-white">
+        <div className="p-8 text-center bg-gray-200">
           <Link 
             to="/" 
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 ease-in-out shadow-sm hover:shadow-md"
