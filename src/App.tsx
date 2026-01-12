@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import BashCommandsPage from "./pages/commands.tsx";
 import PortMappingPage from "./pages/ports.tsx";
+import NotFound from "./pages/404.tsx";
 
 function HomeServerLanding() {
   const [urlStatuses, setUrlStatuses] = useState<Map<string, boolean>>(
@@ -325,6 +326,9 @@ export default function App() {
         <Route path="/" element={<HomeServerLanding />} />
         <Route path="/commands" element={<BashCommandsPage />} />
         <Route path="/ports" element={<PortMappingPage />} />
+        {/* ❌ 404 CATCH-ALL ROUTE */}
+        {/* This must be one of the last routes defined */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
