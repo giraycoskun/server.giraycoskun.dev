@@ -38,6 +38,16 @@
       "icon": "bookore.svg",
       "port": 6060,
       "category": "docker"
+    },
+    {
+      "id": 13,
+      "title": "audiobookshelf",
+      "description": "Self-hosted audiobook and podcast server",
+      "external": "https://github.com/advplyr/audiobookshelf",
+      "url": "https://abs.giraycoskun.dev/",
+      "icon": "audiobookshelf.svg",
+      "port": 13378,
+      "category": "docker"
     }
   ],
   "projects": [

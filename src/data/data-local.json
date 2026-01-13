@@ -119,6 +119,16 @@
       "icon": "code-server.png",
       "port": 8083,
       "category": "systemd"
+    },
+    {
+      "id": 13,
+      "title": "audiobookshelf",
+      "description": "Self-hosted audiobook and podcast server",
+      "external": "https://github.com/advplyr/audiobookshelf",
+      "url": "http://192.168.0.81:13378/",
+      "icon": "audiobookshelf.svg",
+      "port": 13378,
+      "category": "docker"
     }
   ],
   "projects": [
