@@ -129,6 +129,16 @@
       "icon": "audiobookshelf.svg",
       "port": 13378,
       "category": "docker"
+    },
+    {
+      "id": 14,
+      "title": "Swiparr",
+      "description": "\"Tinder for Movies\" – swipe through your library, match with friends in a session, and find something everyone wants to watch.",
+      "external": "https://github.com/m3sserstudi0s/swiparr",
+      "url": "http://192.168.0.81:4321/",
+      "icon": "swiparr.png",
+      "port": 4321,
+      "category": "docker"
     }
   ],
   "projects": [
