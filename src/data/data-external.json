@@ -58,6 +58,16 @@
       "icon": "swiparr.png",
       "port": 4321,
       "category": "docker"
+    },
+    {
+      "id": 15,
+      "title": "Karakeep",
+      "description": "A self-hostable bookmark-everything app (links, notes and images)",
+      "external": "https://github.com/karakeep-app/karakeep",
+      "url": "https://karakeep.giraycoskun.dev/",
+      "icon": "karakeep.svg",
+      "port": 3003,
+      "category": "docker"
     }
   ],
   "projects": [
