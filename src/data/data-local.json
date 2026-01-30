@@ -156,6 +156,7 @@
       "id": 1,
       "title": "Personal Blog",
       "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
+      "external": "https://github.com/giraycoskun/giraycoskun.com",
       "url": "https://giraycoskun.com"
     },
     {
