@@ -74,9 +74,10 @@
     {
       "id": 1,
       "title": "Personal Blog",
-      "description": "Personal website and blog for sharing thoughts, projects, and experiences.",
+      "description": "Personal website and blog for sharing thoughts, projects, and experiences. Built with Astro and hosted via Cloudflare Pages.",
       "external": "https://github.com/giraycoskun/giraycoskun.com",
-      "url": "https://giraycoskun.com"
+      "url": "https://giraycoskun.com",
+      "icon": "blogging.png"
     },
     {
       "id": 2,
