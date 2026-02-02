@@ -92,7 +92,7 @@
     {
       "id": 3,
       "title": "AstroMap",
-      "description": "An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered astrological interpretations.",
+      "description": "My first fully coding with AI agents experiment (aka vibe coding). An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered astrological interpretations.",
       "url": "https://astro.giraycoskun.dev/",
       "category": "nuxt",
       "icon": "astromap.png"
