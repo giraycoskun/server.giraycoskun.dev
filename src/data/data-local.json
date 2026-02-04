@@ -177,6 +177,15 @@
       "url": "https://astro.giraycoskun.dev/",
       "category": "nuxt",
       "icon": "astromap.png"
+    },
+    {
+      "id": 4,
+      "title": "Tally",
+      "description": "My custom habit tracker IOS app, because why not :) Built with Swift/SwiftUI can be sideloaded with AltStore. ",
+      "url": "https://giraycoskun.com/blog/tally/",
+      "external": "https://github.com/giraycoskun/Tally",
+      "category": "Swift",
+      "icon": "tally.png"
     }
   ]
 }

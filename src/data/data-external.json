@@ -94,8 +94,17 @@
       "title": "AstroMap",
       "description": "My first fully coding with AI agents experiment (aka vibe coding). An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered astrological interpretations.",
       "url": "https://astro.giraycoskun.dev/",
-      "category": "nuxt",
+      "category": "Nuxt.js",
       "icon": "astromap.png"
+    },
+    {
+      "id": 4,
+      "title": "Tally",
+      "description": "My custom habit tracker IOS app, because why not :) Built with Swift/SwiftUI can be sideloaded with AltStore. ",
+      "url": "https://giraycoskun.com/blog/tally/",
+      "external": "https://github.com/giraycoskun/Tally",
+      "category": "Swift",
+      "icon": "tally.png"
     }
   ]
 }
