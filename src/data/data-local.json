@@ -149,6 +149,16 @@
       "icon": "karakeep.svg",
       "port": 3003,
       "category": "docker"
+    },
+    {
+      "id": 16,
+      "title": "KitchenOwl",
+      "description": "A self-hosted recipe manager and meal planner",
+      "external": "https://github.com/TomBursch/kitchenowl",
+      "url": "http://192.168.0.81:8086/",
+      "icon": "kitchenowl.png",
+      "port": 8086,
+      "category": "docker"
     }
   ],
   "projects": [
