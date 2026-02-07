@@ -159,6 +159,16 @@
       "icon": "kitchenowl.png",
       "port": 8086,
       "category": "docker"
+    },
+    {
+      "id": 17,
+      "title": "Traefik Metrics",
+      "description": "Traefik Metrics is the metrics publishing part of Traefik.",
+      "external": "https://github.com/traefik/traefik",
+      "url": "http://192.168.0.81:8085/metrics",
+      "icon": "traefik.png",
+      "port": 8085,
+      "category": "docker"
     }
   ],
   "projects": [
