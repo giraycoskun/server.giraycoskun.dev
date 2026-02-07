@@ -78,6 +78,16 @@
       "icon": "kitchenowl.png",
       "port": 8086,
       "category": "docker"
+    },
+    {
+      "id": 18,
+      "title": "Home Assistant",
+      "description": "Home Assistant is an open-source home automation platform that focuses on privacy and local control.",
+      "external": "https://github.com/home-assistant/core",
+      "url": "http://home.giraycoskun.dev/",
+      "icon": "home-assistant.png",
+      "port": 8123,
+      "category": "docker"
     }
   ],
   "projects": [

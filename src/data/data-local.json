@@ -169,6 +169,16 @@
       "icon": "traefik.png",
       "port": 8085,
       "category": "docker"
+    },
+    {
+      "id": 18,
+      "title": "Home Assistant",
+      "description": "Home Assistant is an open-source home automation platform that focuses on privacy and local control.",
+      "external": "https://github.com/home-assistant/core",
+      "url": "http://192.168.0.81:8123/",
+      "icon": "home-assistant.png",
+      "port": 8123,
+      "category": "docker"
     }
   ],
   "projects": [
