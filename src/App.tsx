@@ -150,7 +150,7 @@ function HomeServerLanding() {
                       className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain shrink-0"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src =
-                          "/icons/default-project.svg";
+                          "default-project.svg";
                       }}
                     />
                     <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
