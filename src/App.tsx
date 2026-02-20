@@ -126,15 +126,11 @@ function HomeServerLanding() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
           {appData.projects.map((project) => {
-            const isRunning = urlStatuses.get(project.url) ?? false;
-            const statusColors = getStatusColorClasses(isRunning);
-            const statusLabel = getStatusLabel(isRunning);
-
             return (
               <div
                 key={project.id}
                 onClick={() => (window.location.href = project.url)}
-                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 cursor-pointer transition-transform duration-200 hover:-translate-y-2"
+                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 h-full cursor-pointer transition-transform duration-200 hover:-translate-y-2"
               >
                 {/* Card background */}
                 <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
@@ -142,7 +138,7 @@ function HomeServerLanding() {
                 {/* Shine effect (subtle) */}
                 <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
-                <div className="relative z-10">
+                <div className="relative z-10 h-full flex flex-col">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <img
                       src={project.icon ?? `/project-icon.svg`}
@@ -173,7 +169,7 @@ function HomeServerLanding() {
                     {project.description}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mt-auto">
                     <a
                       href={project.url}
                       onClick={(e) => e.stopPropagation()}
@@ -182,14 +178,14 @@ function HomeServerLanding() {
                     >
                       Open Project →
                     </a>
-                    <span
+                    {/* <span
                       className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}
                     >
                       <span
                         className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`}
                       />
                       {statusLabel}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </div>
@@ -209,7 +205,7 @@ function HomeServerLanding() {
         {/* Service Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
           {appData.services.map((service) => {
-            const isRunning = urlStatuses.get(service.url) ?? false;
+            const isRunning = urlStatuses.get(service.url);
             const statusColors = getStatusColorClasses(isRunning);
             const statusLabel = getStatusLabel(isRunning);
 
@@ -217,7 +213,7 @@ function HomeServerLanding() {
               <div
                 key={service.id}
                 onClick={() => (window.location.href = service.url)}
-                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 cursor-pointer transition-transform duration-200 hover:-translate-y-2"
+                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 h-full cursor-pointer transition-transform duration-200 hover:-translate-y-2"
               >
                 {/* Card background */}
                 <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
@@ -225,7 +221,7 @@ function HomeServerLanding() {
                 {/* Shine effect (subtle) */}
                 <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
 
-                <div className="relative z-10">
+                <div className="relative z-10 h-full flex flex-col">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <img
                       src={service.icon ?? `/service-icon.svg`}
@@ -256,7 +252,7 @@ function HomeServerLanding() {
                     {service.description}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mt-auto">
                     <a
                       href={service.url}
                       onClick={(e) => e.stopPropagation()}

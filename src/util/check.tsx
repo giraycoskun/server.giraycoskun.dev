@@ -45,18 +45,29 @@ export async function checkMultipleUrls(
 /**
  * Get status label based on URL reachability.
  */
-export function getStatusLabel(isRunning: boolean): string {
+export function getStatusLabel(isRunning: boolean | undefined): string {
+  if (isRunning === undefined) {
+    return 'Waiting';
+  }
   return isRunning ? 'Running' : 'Offline';
 }
 
 /**
  * Get status color classes based on URL reachability.
  */
-export function getStatusColorClasses(isRunning: boolean): {
+export function getStatusColorClasses(isRunning: boolean | undefined): {
   bg: string;
   border: string;
   dot: string;
 } {
+  if (isRunning === undefined) {
+    return {
+      bg: 'bg-yellow-600/20',
+      border: 'border-yellow-600/40',
+      dot: 'bg-yellow-300',
+    };
+  }
+
   if (isRunning) {
     return {
       bg: 'bg-green-600/20',

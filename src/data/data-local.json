@@ -193,7 +193,7 @@
     {
       "id": 2,
       "title": "localhost",
-      "description": "This server.\nMy home server dashboard `server.giraycoskun.dev` website.",
+      "description": "This server. My home server dashboard `server.giraycoskun.dev` website.",
       "external": "https://github.com/giraycoskun/server.giraycoskun.dev",
       "url": "https://192.168.0.81/",
       "category": "nginx",
@@ -203,15 +203,14 @@
     {
       "id": 3,
       "title": "AstroMap",
-      "description": "My first fully coding with AI agents experiment (aka vibe coding). An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered astrological interpretations.",
-      "url": "https://astro.giraycoskun.dev/",
+      "description": "My first coding with AI agents experiment (aka vibe coding). An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered horoscope interpretations.",
       "category": "nuxt",
       "icon": "astromap.png"
     },
     {
       "id": 4,
       "title": "Tally",
-      "description": "My custom habit tracker IOS app, because why not :) Built with Swift/SwiftUI can be sideloaded with AltStore. ",
+      "description": "My custom habit tracker IOS app, because what is one more :) Built with Swift/SwiftUI can be sideloaded with AltStore.",
       "url": "https://giraycoskun.com/blog/tally/",
       "external": "https://github.com/giraycoskun/Tally",
       "category": "Swift",
