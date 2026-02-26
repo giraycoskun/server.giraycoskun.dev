@@ -125,6 +125,15 @@
       "external": "https://github.com/giraycoskun/Tally",
       "category": "Swift",
       "icon": "tally.png"
+    },
+    {
+      "id": 5,
+      "title": "F1-Board",
+      "description": "A Formula 1 prediction game with stats, ML Model Predictions, and insights about the sport.",
+      "url": "https://f1board.giraycoskun.dev/",
+      "external": "https://github.com/giraycoskun/f1-board",
+      "category": "nuxt",
+      "icon": "f1-board.png"
     }
   ]
 }
