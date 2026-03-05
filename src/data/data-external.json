@@ -134,6 +134,15 @@
       "external": "https://github.com/giraycoskun/f1-board",
       "category": "nuxt",
       "icon": "f1-board.png"
+    },
+    {
+      "id": 6,
+      "title": "webhook-server",
+      "description": "A simple webhook server built with Python and FastAPI, designed as a personal CI/CD tool to automate tasks and integrate with various services.",
+      "url": "https://webhook.giraycoskun.dev/docs",
+      "external": "https://github.com/giraycoskun/webhook-server",
+      "category": "Python",
+      "icon": "webhook-server.png"
     }
   ]
 }
