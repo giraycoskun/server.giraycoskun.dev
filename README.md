@@ -1,45 +1,186 @@
 # Server Home Page
 
-## Build
+> [!IMPORTANT]
+> **Hosted website:** [server.giraycoskun.dev](https://server.giraycoskun.dev)
+
+> [!TIP]
+> **Features**
+> - Responsive landing page for self-hosted services and personal projects
+> - Live service reachability badges with `Running`, `Offline`, and `Waiting` states
+> - Searchable **Port Mapper** view at `/ports`
+> - Searchable **Bash Commands Reference** view at `/commands`
+> - Separate local and external builds backed by different JSON datasets
+> - Lightweight deployment pipeline using GitHub webhooks, Express, `systemd`, and Nginx
+> - Nginx routing that serves `dist-local` or `dist-external` based on request origin
+
+## Overview
+
+`server.giraycoskun.dev` is a React + Vite + TypeScript dashboard for a home server. It exposes self-hosted services, personal projects, utility pages, and a small deployment webhook used to rebuild the site after GitHub pushes.
+
+The frontend currently uses:
+
+- `src/data/data-local.json` for the local-network version
+- `src/data/data-external.json` for the public version
+
+Current content snapshot:
+
+- Local build: 18 services and 6 projects
+- External build: 9 services and 6 projects
+- Main routes: `/`, `/ports`, `/commands`
+
+## Tech Stack
+
+- React 19
+- Vite 7
+- TypeScript 5
+- Tailwind CSS 4
+- React Router 7
+- Express 5 for the webhook listener
+- Nginx for TLS termination, reverse proxying, and static file serving
+
+## Routes
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Landing page for services and projects |
+| `/ports` | Searchable port-to-service and port-to-project mapping |
+| `/commands` | Searchable Linux and bash command reference |
+| `/webhook` | GitHub webhook endpoint proxied to the Express server |
+| `/webhook/health` | Health endpoint for the webhook service |
+
+## Development
+
+### Requirements
+
+- Node.js 24+ recommended
+- `pnpm`
+
+### Install
 
 ```bash
 pnpm install
-pnpm run build
 ```
 
-```bash
-pnpm build:local
-pnpm build:external
-```
+### Run locally
 
 ```bash
 pnpm dev
 ```
 
-## Nginx Conf
+### Available scripts
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the Vite development server |
+| `pnpm build` | Run TypeScript build and create the default production bundle |
+| `pnpm build:local` | Build the local-network version into `dist-local` |
+| `pnpm build:external` | Build the public version into `dist-external` |
+| `pnpm preview` | Preview the built frontend |
+| `pnpm lint` | Run ESLint |
+| `pnpm start` | Start the Express webhook server from `src/server/webhook.tsx` |
+
+## Environment Setup
+
+The frontend chooses its data source using `VITE_ENV`.
+
+`.env.local`
+
+```bash
+VITE_ENV=local
+```
+
+`.env.external`
+
+```bash
+VITE_ENV=external
+```
+
+The webhook server also needs runtime secrets and deployment credentials. Provide them through a `systemd` `EnvironmentFile` such as `/etc/webhook-server.env` instead of hardcoding values in commands:
+
+- `WEBHOOK_SECRET`
+- `GITHUB_TOKEN`
+- `PORT` (optional, defaults to `9000`)
+
+## Project Structure
+
+| Path | Purpose |
+| --- | --- |
+| `src/App.tsx` | Main router and landing page |
+| `src/pages/ports.tsx` | Port Mapper page |
+| `src/pages/commands.tsx` | Bash Commands Reference page |
+| `src/data/data.tsx` | Loads environment-specific JSON data |
+| `src/data/data-local.json` | Local-network services and projects |
+| `src/data/data-external.json` | Public-facing services and projects |
+| `src/util/check.tsx` | Client-side URL reachability checks |
+| `src/server/webhook.tsx` | Express webhook listener |
+| `src/server/build.sh` | Deployment build script |
+| `nginx.conf` | Nginx configuration for serving and proxying |
+
+## Dual-Build Setup
+
+This project intentionally generates two frontend outputs:
+
+- `dist-local` for requests coming from the home network
+- `dist-external` for public requests
+
+At runtime:
+
+1. Nginx classifies the request as local or external.
+2. It maps the request to the correct build directory.
+3. The frontend loads the matching JSON dataset through `src/data/data.tsx`.
+
+This allows the public site to expose a reduced set of services while keeping the local dashboard more complete.
+
+## Deployment Flow
+
+The deployed setup is intentionally lightweight:
+
+1. A push to GitHub triggers a webhook request to `/webhook`.
+2. Nginx forwards that request to the Express app on port `9000`.
+3. `src/server/webhook.tsx` verifies `X-Hub-Signature-256`.
+4. The webhook server runs `src/server/build.sh`.
+5. The build script fetches the latest changes, installs dependencies, and rebuilds both frontend variants.
+6. Nginx continues serving `dist-local` or `dist-external` based on the incoming client.
+
+Current build script flow:
+
+```bash
+git fetch ...
+git pull ...
+pnpm install
+pnpm build:local
+pnpm build:external
+```
+
+## Nginx
+
+The repository includes an Nginx configuration that:
+
+- redirects HTTP to HTTPS
+- uses a Cloudflare origin certificate
+- trusts `CF-Connecting-IP` for request origin detection
+- proxies `/webhook` to the local Express listener
+- switches the site root between `dist-local` and `dist-external`
+
+Typical deployment steps:
 
 ```bash
 sudo cp nginx.conf /etc/nginx/sites-available/default
-```
-
-```bash
 sudo nginx -t
-sudo nginx -s reload
 sudo systemctl reload nginx
-sudo systemctl status nginx
 ```
 
-```bash
-sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-```
+## Webhook Service
 
-## Webhook Server
+Example `systemd` unit name:
 
-/etc/systemd/system/server-webhook.service
-```
+`/etc/systemd/system/server-webhook.service`
+
+Example service definition:
+
+```ini
 [Unit]
-Description=GitHub Server-Webhook Listener
+Description=GitHub Server Webhook Listener
 After=network.target
 
 [Service]
@@ -48,162 +189,31 @@ User=giraycoskun
 WorkingDirectory=/home/giraycoskun/Code/server.giraycoskun.dev/
 ExecStart=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin/pnpm start
 Restart=always
-# Redirect logs to a file
+Environment="PATH=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/etc/webhook-server.env
 StandardOutput=append:/var/log/server-webhook.log
 StandardError=inherit
 
-Environment="PATH=/home/giraycoskun/.nvm/versions/node/v24.11.1/bin:/usr/local/bin:/usr/bin:/bin"
-EnvironmentFile=/etc/webhook-server.env
-
 [Install]
 WantedBy=multi-user.target
 ```
+
+Useful commands:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl start server-webhook
-sudo systemctl restart server-webhook
 sudo systemctl enable server-webhook
+sudo systemctl restart server-webhook
 sudo systemctl status server-webhook
-journalctl -u server-webhook.service -r
-journalctl -xeu server-webhook.service
-journalctl -u server-webhook.service -n 15 -f
+journalctl -u server-webhook.service -n 50 -f
 ```
 
-The project is developed via React, Vite, and TypeScript. I have chosen React because well, I like and have some experience with it. I have never used Vite previously, but it has been quite fast to test and build the project and did not face any issues so far. I have also never used Typescript but I have been writing Python with types, thus wanted to give it a try for javascript as well.
+## Screenshots
 
-Project is built and served via Nginx on my home server. I also wanted a Continuous Build setup, but Jenkins was too heavy for this, thus have a small Express.js app that listens to GitHub webhooks and triggers a build bash script which is run as a systemd service.
+Local build:
 
+![server-local](https://images.giraycoskun.dev/ss-server-local.png)
 
-### Initialize project
-
-```bash
-pnpm create vite@latest my-app --template react
-```
-
-```bash
-pnpm install
-```
-
-This sets up a basic React + Vite project with TypeScript support. The development server can be started with:
-
-```bash
-pnpm dev
-```
-
-### Project Structure
-
-The project follows a standard React application structure:
-
-- `/src` - Main application code
-- `/src/components` - Reusable React components
-- `/src/pages` - Page components
-- `/public` - Static assets
-- `vite.config.ts` - Vite configuration
-
-## Step 2: How to Build via GitHub Webhooks
-
-I have considered Jenkins for Continuous Deployment but it was too heavy and as the Nginx was on the host machine directly, and Jenkins either needed to be directly on host machine as well or else the container creates some overhead due to SSH connection.
-
-I have decided on a simpler solution: A simple Express.js app (`./src/server/webhook-server.ts`) that is triggered by a GitHub Webhook, run as a systemd service.
-
-## Double Build
-
-![server-screenshot](https://images.giraycoskun.dev/ss-server-local.png)
+External build:
 
 ![server-external](https://images.giraycoskun.dev/ss-server-external.png)
-
-
-### Systemd Service
-
-Create a systemd service file at `/etc/systemd/system/webhook-server.service`:
-
-```ini
-[Unit]
-Description=GitHub Webhook Server
-After=network.target
-
-[Service]
-Type=simple
-User=your-user
-WorkingDirectory=/path/to/project
-ExecStart=/usr/bin/node /path/to/webhook-server.js
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Enable and start the service:
-
-```bash
-sudo systemctl enable webhook-server
-sudo systemctl start webhook-server
-```
-
-### Webhook Handler
-
-The Express.js application listens for GitHub webhook events and triggers the build script:
-
-```javascript
-const express = require('express');
-const { exec } = require('child_process');
-
-app.post('/webhook', (req, res) => {
-  // Verify webhook signature
-  // Execute build script
-  exec('./build.sh', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error: ${error}`);
-      return;
-    }
-    console.log(`Build output: ${stdout}`);
-  });
-  
-  res.status(200).send('Webhook received');
-});
-```
-
-## Step 3: How to Deploy in Nginx on Home Server
-
-Here are the essential steps to deploy the built React application on Nginx:
-
-### Build the Project
-
-```bash
-pnpm build
-```
-
-This creates an optimized production build in the `dist` directory.
-
-### Nginx Configuration
-
-Create an Nginx server block configuration file at `/etc/nginx/sites-available/server.giraycoskun.dev`:
-
-```nginx
-server {
-    listen 80;
-    server_name server.giraycoskun.dev;
-    
-    root /path/to/project/dist;
-    index index.html;
-    
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-    
-    # Cache static assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}
-```
-
-Enable the site:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/server.giraycoskun.dev /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-```
