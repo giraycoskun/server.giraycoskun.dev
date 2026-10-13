@@ -52,7 +52,7 @@
     {
       "id": 14,
       "title": "Swiparr",
-      "description": "\"Tinder for Movies\" – swipe through your library, match with friends in a session, and find something everyone wants to watch.",
+      "description": "\"Tinder for Movies\" \u2013 swipe through your library, match with friends in a session, and find something everyone wants to watch.",
       "external": "https://github.com/m3sserstudi0s/swiparr",
       "url": "https://swiparr.giraycoskun.dev/",
       "icon": "swiparr.png",
@@ -88,6 +88,75 @@
       "icon": "home-assistant.png",
       "port": 8123,
       "category": "docker"
+    },
+    {
+      "id": 19,
+      "title": "Authentik",
+      "description": "Identity provider and single sign-on for self-hosted applications.",
+      "url": "https://auth.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 80,
+      "category": "docker",
+      "external": "https://goauthentik.io/"
+    },
+    {
+      "id": 20,
+      "title": "Linkwarden",
+      "description": "Bookmark manager for collecting and archiving web pages.",
+      "url": "https://link.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 3004,
+      "category": "docker",
+      "external": "https://github.com/linkwarden/linkwarden"
+    },
+    {
+      "id": 21,
+      "title": "Openinary",
+      "description": "Self-hosted media management and image processing.",
+      "url": "https://media.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 3005,
+      "category": "docker"
+    },
+    {
+      "id": 22,
+      "title": "Reactive Resume",
+      "description": "Resume builder for creating and sharing resumes.",
+      "url": "https://cv.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 443,
+      "category": "docker",
+      "external": "https://github.com/AmruthPillai/Reactive-Resume"
+    },
+    {
+      "id": 23,
+      "title": "Pi-hole",
+      "description": "Network-wide DNS filtering and ad blocking.",
+      "url": "https://pihole.giraycoskun.dev/admin/",
+      "icon": "service-icon.svg",
+      "port": 80,
+      "category": "docker",
+      "external": "https://github.com/pi-hole/pi-hole"
+    },
+    {
+      "id": 24,
+      "title": "Open WebUI",
+      "description": "Chat interface for locally hosted language models.",
+      "url": "https://chat.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 80,
+      "category": "docker",
+      "external": "https://github.com/open-webui/open-webui"
+    },
+    {
+      "id": 25,
+      "title": "Ollama",
+      "description": "API for running and interacting with local language models.",
+      "url": "https://ollama.giraycoskun.dev/",
+      "icon": "service-icon.svg",
+      "port": 80,
+      "category": "docker",
+      "external": "https://github.com/ollama/ollama"
     }
   ],
   "projects": [

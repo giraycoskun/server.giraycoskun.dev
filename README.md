@@ -24,9 +24,17 @@ The frontend currently uses:
 
 Current content snapshot:
 
-- Local build: 18 services and 6 projects
-- External build: 9 services and 6 projects
+- Local build: 28 services and 6 projects
+- External build: 16 services and 6 projects
 - Main routes: `/`, `/ports`, `/commands`
+
+## Docker service URLs
+
+Dashboard entries follow the Compose ports and active Traefik routing rules in `/home/giraycoskun/docker`. Local-only apps (Bazarr, Seerr, and Prometheus) appear only in the local dataset. Background workers such as ShelfBridge and Lettarrboxd have no configured web interface and are omitted.
+
+Open WebUI, Ollama, and Pi-hole do not publish web ports on the host. Their local links use HTTP hostnames through Traefik on port 80; local DNS must resolve those hostnames to the server. Authentik also uses its Traefik hostname locally to avoid the port 9001 conflict with Cronitor. External links use HTTPS hostnames; a configured Traefik route does not by itself verify public DNS or tunnel availability.
+
+Reactive Resume uses `https://cv.giraycoskun.dev/` in both datasets. Its Compose mapping requests host port 3000, which is currently occupied by Grafana, so a direct local port link would open the wrong app. Its port entry is 443 to match the dashboard link. Resolve the deployment conflict before expecting the resume service to be reachable.
 
 ## Tech Stack
 
