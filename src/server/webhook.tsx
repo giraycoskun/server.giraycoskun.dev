@@ -11,7 +11,7 @@ if (!SECRET) {
 }
 
 app.use(express.json({
-  verify: (req: express.Request & { rawBody?: Buffer }, _res: any, buf: Buffer) => {
+  verify: (req: express.Request & { rawBody?: Buffer }, _res: express.Response, buf: Buffer) => {
     req.rawBody = buf;
   }
 }));

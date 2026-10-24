@@ -34,7 +34,7 @@ const BashCommandsPage: React.FC = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [customInputs, setCustomInputs] = useState<Record<number, string>>({});
 
-  const commands: Command[] = [
+  const commands: Command[] = useMemo(() => [
     {
       id: 1,
       category: "files",
@@ -340,7 +340,7 @@ const BashCommandsPage: React.FC = () => {
         },
       ],
     },
-  ];
+  ], []);
 
   const categories: Category[] = [
     { id: "all", name: "All Commands" },
@@ -367,7 +367,7 @@ const BashCommandsPage: React.FC = () => {
         );
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, commands, searchQuery]);
 
   const copyToClipboard = (text: string, id: string): void => {
     navigator.clipboard.writeText(text);

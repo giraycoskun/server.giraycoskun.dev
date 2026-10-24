@@ -20,7 +20,7 @@ export async function checkUrlStatus(url: string): Promise<boolean> {
     // With 'no-cors', response.type will be 'opaque'
     // We can't read status, but if fetch succeeds, the server is reachable
     return true;
-  } catch (error) {
+  } catch {
     // Network error, timeout, or DNS failure
     return false;
   }
