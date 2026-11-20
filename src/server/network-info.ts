@@ -42,11 +42,17 @@ function getPublicIPv4() {
   return publicLookup;
 }
 
+async function getTailscaleIPv4(): Promise<string | null> {
+  try {
+    const { stdout } = await run("tailscale", ["ip", "-4"], { timeout: 2000 });
+    const address = stdout.trim();
+    return isIPv4(address) ? address : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getNetworkInfo() {
-  const [lanInterface, publicIPv4] = await Promise.all([
-    getLanInterface(),
-    getPublicIPv4(),
-  ]);
   const interfaces = networkInterfaces();
   const ipv4 = (name: string | undefined) => {
     if (!name) return null;
@@ -55,10 +61,16 @@ export async function getNetworkInfo() {
     );
     return entry?.address ?? null;
   };
+  const [lanInterface, tailscaleIPv4, publicIPv4] = await Promise.all([
+    getLanInterface(),
+    ipv4("tailscale0") ?? getTailscaleIPv4(),
+    getPublicIPv4(),
+  ]);
 
   return {
     lanIPv4: ipv4(lanInterface),
-    tailscaleIPv4: ipv4("tailscale0"),
+    tailscaleIPv4,
     publicIPv4,
+    observedAt: new Date().toISOString(),
   };
 }

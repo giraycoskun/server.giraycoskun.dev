@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Search, Network, ArrowRight, Home } from "lucide-react";
-import appData, { isExternalBuild } from "../data/data.tsx";
+import appData from "../data/data.tsx";
 
 const categoryColors: Record<string, string> = {
   systemd: "from-orange-500 to-orange-700",
@@ -17,45 +17,71 @@ const addressLabels = {
   publicIPv4: "External IPv4",
 } as const;
 
-type NetworkInfo = Record<keyof typeof addressLabels, string | null>;
+type AddressKey = keyof typeof addressLabels;
+const addressKeys = Object.keys(addressLabels) as AddressKey[];
+type NetworkInfo = Record<AddressKey, string | null> & { observedAt?: string };
+type NetworkAddressesResult = { info: NetworkInfo; snapshot: boolean };
+
+async function loadNetworkAddresses(
+  signal: AbortSignal,
+): Promise<NetworkAddressesResult | null> {
+  for (const path of ["/network-info", "/network-info.json"]) {
+    if (signal.aborted) return null;
+    try {
+      const response = await fetch(path, { cache: "no-store", signal });
+      if (!response.ok) continue;
+      const info = (await response.json()) as NetworkInfo | null;
+      if (
+        info &&
+        addressKeys.every((key) => info[key] === null || typeof info[key] === "string") &&
+        addressKeys.some((key) => info[key])
+      ) {
+        return { info, snapshot: path.endsWith(".json") };
+      }
+    } catch {
+      // The deployed reverse proxy may only serve the static build.
+    }
+  }
+  return null;
+}
 
 function NetworkAddresses() {
-  const [addresses, setAddresses] = useState<NetworkInfo | null>();
+  const [addresses, setAddresses] = useState<NetworkAddressesResult | null>();
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/network-info", { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Server addresses are unavailable");
-        return response.json() as Promise<NetworkInfo>;
-      })
-      .then(setAddresses)
-      .catch(() => {
-        if (!controller.signal.aborted) setAddresses(null);
-      });
+    void loadNetworkAddresses(controller.signal).then((result) => {
+      if (!controller.signal.aborted) setAddresses(result);
+    });
     return () => controller.abort();
   }, []);
 
+  const observedAt = addresses?.snapshot ? addresses.info.observedAt : undefined;
+
   return (
-    <dl
-      aria-label="Server IP addresses"
-      aria-live="polite"
-      className="mb-8 grid gap-3 sm:grid-cols-3"
-    >
-      {(Object.keys(addressLabels) as (keyof NetworkInfo)[]).map((key) => (
-        <div
-          key={key}
-          className="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3"
-        >
-          <dt className="text-sm text-slate-300">{addressLabels[key]}</dt>
-          <dd className="mt-1 font-mono text-white">
-            {addresses === undefined
-              ? "Loading…"
-              : addresses?.[key] ?? "Unavailable"}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <section aria-label="Server IP addresses" aria-live="polite" className="mb-8">
+      <dl className="grid gap-3 sm:grid-cols-3">
+        {addressKeys.map((key) => (
+          <div
+            key={key}
+            className="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3"
+          >
+            <dt className="text-sm text-slate-300">{addressLabels[key]}</dt>
+            <dd className="mt-1 font-mono text-white">
+              {addresses === undefined
+                ? "Loading…"
+                : addresses?.info[key] ?? "Unavailable"}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {observedAt && (
+        <p className="mt-2 text-sm text-slate-400">
+          Server snapshot from{" "}
+          <time dateTime={observedAt}>{new Date(observedAt).toLocaleString()}</time>
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -158,7 +184,7 @@ const PortMappingPage: React.FC = () => {
           </div>
         </div>
 
-        {!isExternalBuild && <NetworkAddresses />}
+        <NetworkAddresses />
 
         {/* Search Bar */}
         <div className="mb-8">

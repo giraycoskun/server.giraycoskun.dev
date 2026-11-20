@@ -56,7 +56,8 @@ Reactive Resume uses `https://cv.giraycoskun.dev/` in both datasets. Its Compose
 | --- | --- |
 | `/` | Landing page for services and projects |
 | `/ports` | Searchable port-to-service and port-to-project mapping |
-| `/network-info` | Server LAN, Tailscale, and external IPv4 addresses for local clients |
+| `/network-info` | Live server LAN, Tailscale, and public IPv4 addresses |
+| `/network-info.json` | Snapshot of server IPv4 addresses taken during the build |
 | `/commands` | Searchable Linux and bash command reference |
 | `/webhook` | GitHub webhook endpoint proxied to the Express server |
 | `/webhook/health` | Health endpoint for the webhook service |
@@ -145,7 +146,9 @@ At runtime:
 
 This allows the public site to expose a reduced set of services while keeping the local dashboard more complete.
 
-On `/ports`, the local build shows the server's LAN and Tailscale interface addresses plus its public egress IPv4, looked up by the server through [ipify](https://www.ipify.org/) and cached for one minute. Missing addresses show as unavailable. To enable the display on an existing deployment, install the updated Nginx configuration and restart the webhook service after rebuilding.
+Both versions of `/ports` show the server's LAN and Tailscale IPv4 addresses plus its public egress IPv4. The public build also publishes these addresses in `network-info.json`. Build on the server so the snapshot reflects its network. The page tries the live endpoint first and displays the build snapshot with its timestamp when the live endpoint is unavailable. The server looks up its public IPv4 through [ipify](https://www.ipify.org/) and caches live lookups for one minute.
+
+Rebuild and deploy both outputs to enable the snapshot on existing installations. To enable live address updates, install the updated Nginx configuration and restart the webhook service.
 
 ## Deployment Flow
 
