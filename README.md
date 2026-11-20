@@ -34,6 +34,10 @@ Dashboard entries follow the Compose ports and active Traefik routing rules in `
 
 Open WebUI, Ollama, and Pi-hole do not publish web ports on the host. Their local links use HTTP hostnames through Traefik on port 80; local DNS must resolve those hostnames to the server. Authentik also uses its Traefik hostname locally to avoid the port 9001 conflict with Cronitor. External links use HTTPS hostnames; a configured Traefik route does not by itself verify public DNS or tunnel availability.
 
+Direct links in the local dataset use `{host}` for the server address. By default, the dashboard uses the hostname or IP from the browser's URL. Open it through a LAN DNS name on your home network or through the server's [Tailscale MagicDNS name](https://tailscale.com/docs/features/magicdns) on your tailnet. A router DHCP reservation can also keep the LAN address stable.
+
+If the dashboard address and direct service address differ, set `VITE_LOCAL_HOST` to the service hostname or IP in `.env.local` and rebuild the local bundle. Use a hostname without a scheme, port, or path. For example, set it to the server's MagicDNS name if every local dashboard client uses Tailscale. HTTPS endpoints still require a certificate valid for the hostname you use.
+
 Reactive Resume uses `https://cv.giraycoskun.dev/` in both datasets. Its Compose mapping requests host port 3000, which is currently occupied by Grafana, so a direct local port link would open the wrong app. Its port entry is 443 to match the dashboard link. Resolve the deployment conflict before expecting the resume service to be reachable.
 
 ## Tech Stack
@@ -52,6 +56,7 @@ Reactive Resume uses `https://cv.giraycoskun.dev/` in both datasets. Its Compose
 | --- | --- |
 | `/` | Landing page for services and projects |
 | `/ports` | Searchable port-to-service and port-to-project mapping |
+| `/network-info` | Server LAN, Tailscale, and external IPv4 addresses for local clients |
 | `/commands` | Searchable Linux and bash command reference |
 | `/webhook` | GitHub webhook endpoint proxied to the Express server |
 | `/webhook/health` | Health endpoint for the webhook service |
@@ -108,6 +113,7 @@ The webhook server also needs runtime secrets and deployment credentials. Provid
 - `WEBHOOK_SECRET`
 - `GITHUB_TOKEN`
 - `PORT` (optional, defaults to `9000`)
+- `LAN_INTERFACE` (optional, defaults to the Linux IPv4 default-route interface reported by `ip`)
 
 ## Project Structure
 
@@ -128,7 +134,7 @@ The webhook server also needs runtime secrets and deployment credentials. Provid
 
 This project intentionally generates two frontend outputs:
 
-- `dist-local` for requests coming from the home network
+- `dist-local` for requests coming from the home network or directly over Tailscale
 - `dist-external` for public requests
 
 At runtime:
@@ -138,6 +144,8 @@ At runtime:
 3. The frontend loads the matching JSON dataset through `src/data/data.tsx`.
 
 This allows the public site to expose a reduced set of services while keeping the local dashboard more complete.
+
+On `/ports`, the local build shows the server's LAN and Tailscale interface addresses plus its public egress IPv4, looked up by the server through [ipify](https://www.ipify.org/) and cached for one minute. Missing addresses show as unavailable. To enable the display on an existing deployment, install the updated Nginx configuration and restart the webhook service after rebuilding.
 
 ## Deployment Flow
 

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Network, ArrowRight, Home } from "lucide-react";
-import appData from "../data/data.tsx";
+import appData, { isExternalBuild } from "../data/data.tsx";
 
 const categoryColors: Record<string, string> = {
   systemd: "from-orange-500 to-orange-700",
@@ -10,6 +10,54 @@ const categoryColors: Record<string, string> = {
 };
 
 const defaultDescription = "";
+
+const addressLabels = {
+  lanIPv4: "Local IPv4 (LAN)",
+  tailscaleIPv4: "Tailscale IPv4",
+  publicIPv4: "External IPv4",
+} as const;
+
+type NetworkInfo = Record<keyof typeof addressLabels, string | null>;
+
+function NetworkAddresses() {
+  const [addresses, setAddresses] = useState<NetworkInfo | null>();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/network-info", { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("Server addresses are unavailable");
+        return response.json() as Promise<NetworkInfo>;
+      })
+      .then(setAddresses)
+      .catch(() => {
+        if (!controller.signal.aborted) setAddresses(null);
+      });
+    return () => controller.abort();
+  }, []);
+
+  return (
+    <dl
+      aria-label="Server IP addresses"
+      aria-live="polite"
+      className="mb-8 grid gap-3 sm:grid-cols-3"
+    >
+      {(Object.keys(addressLabels) as (keyof NetworkInfo)[]).map((key) => (
+        <div
+          key={key}
+          className="rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3"
+        >
+          <dt className="text-sm text-slate-300">{addressLabels[key]}</dt>
+          <dd className="mt-1 font-mono text-white">
+            {addresses === undefined
+              ? "Loading…"
+              : addresses?.[key] ?? "Unavailable"}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
 
 const PortMappingPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -109,6 +157,8 @@ const PortMappingPage: React.FC = () => {
             </p>
           </div>
         </div>
+
+        {!isExternalBuild && <NetworkAddresses />}
 
         {/* Search Bar */}
         <div className="mb-8">

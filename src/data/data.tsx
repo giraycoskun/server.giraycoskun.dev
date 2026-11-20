@@ -32,22 +32,26 @@ type ProjectsData = {
 
 type AppData = ServicesData & ProjectsData;
 
-const env = import.meta.env.VITE_ENV;
+export const isExternalBuild = import.meta.env.VITE_ENV === "external";
+const { default: data }: { default: AppData } = isExternalBuild
+  ? await import("./data-external.json")
+  : await import("./data-local.json");
 
-/**
- * Try to load ./config.<env>.json, fallback to ./local.json on error.
- * Uses top-level await like the original JS file to keep the default export synchronous for importers.
- */
-let appData: AppData;
+const localHost = isExternalBuild
+  ? ""
+  : import.meta.env.VITE_LOCAL_HOST?.trim() || window.location.hostname;
 
-try {
-  const mod = await import(`./data-${env}.json`);
-  appData = (mod && (mod.default ?? mod)) as AppData;
-} catch (error) {
-  console.error(`Failed to load config for environment: ${env}`, error);
-  const fallback = await import('./data-local.json');
-  appData = (fallback && (fallback.default ?? fallback)) as AppData;
+function resolveUrl<T extends { url: string }>(entry: T): T {
+  const url = entry.url.startsWith("/")
+    ? new URL(entry.url, window.location.origin).href
+    : entry.url.replace("{host}", localHost);
+  return { ...entry, url };
 }
 
+const appData: AppData = {
+  services: data.services.map(resolveUrl),
+  projects: data.projects.map(resolveUrl),
+};
+
 export type { Service, Project, AppData };
-export default appData; 
+export default appData;

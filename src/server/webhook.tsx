@@ -1,6 +1,7 @@
 import express from "express";
 import crypto from "crypto";
 import { exec } from "child_process";
+import { getNetworkInfo } from "./network-info.ts";
 
 const app = express();
 const SECRET = process.env.WEBHOOK_SECRET!;
@@ -66,6 +67,16 @@ app.post("/webhook", (req, res) => {
 
 app.get("/webhook/health", (_req, res) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
+app.get("/network-info", async (req, res) => {
+  const peer = req.socket.remoteAddress;
+  if (peer !== "127.0.0.1" && peer !== "::ffff:127.0.0.1" && peer !== "::1") {
+    res.sendStatus(404);
+    return;
+  }
+
+  res.set("Cache-Control", "no-store").json(await getNetworkInfo());
 });
 
 console.log("Current working directory:", process.cwd());
