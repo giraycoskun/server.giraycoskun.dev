@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Search, Network, ArrowRight, Home } from "lucide-react";
-import appData from "../data/data.tsx";
+import { getAppData } from "../data/data.ts";
+import type { CatalogEntry } from "../data/data.ts";
+import { addressKeys, addressLabels, useNetworkAddresses } from "../data/network-addresses.ts";
+import type { NetworkAddressesResult } from "../data/network-addresses.ts";
+import { AccessLinks, CatalogIcon } from "../components/access-links.tsx";
 
 const categoryColors: Record<string, string> = {
   systemd: "from-orange-500 to-orange-700",
@@ -9,53 +13,7 @@ const categoryColors: Record<string, string> = {
   default: "from-rose-500 to-rose-600",
 };
 
-const defaultDescription = "";
-
-const addressLabels = {
-  lanIPv4: "Local IPv4 (LAN)",
-  tailscaleIPv4: "Tailscale IPv4",
-  publicIPv4: "External IPv4",
-} as const;
-
-type AddressKey = keyof typeof addressLabels;
-const addressKeys = Object.keys(addressLabels) as AddressKey[];
-type NetworkInfo = Record<AddressKey, string | null> & { observedAt?: string };
-type NetworkAddressesResult = { info: NetworkInfo; snapshot: boolean };
-
-async function loadNetworkAddresses(
-  signal: AbortSignal,
-): Promise<NetworkAddressesResult | null> {
-  for (const path of ["/network-info", "/network-info.json"]) {
-    if (signal.aborted) return null;
-    try {
-      const response = await fetch(path, { cache: "no-store", signal });
-      if (!response.ok) continue;
-      const info = (await response.json()) as NetworkInfo | null;
-      if (
-        info &&
-        addressKeys.every((key) => info[key] === null || typeof info[key] === "string") &&
-        addressKeys.some((key) => info[key])
-      ) {
-        return { info, snapshot: path.endsWith(".json") };
-      }
-    } catch {
-      // The deployed reverse proxy may only serve the static build.
-    }
-  }
-  return null;
-}
-
-function NetworkAddresses() {
-  const [addresses, setAddresses] = useState<NetworkAddressesResult | null>();
-
-  useEffect(() => {
-    const controller = new AbortController();
-    void loadNetworkAddresses(controller.signal).then((result) => {
-      if (!controller.signal.aborted) setAddresses(result);
-    });
-    return () => controller.abort();
-  }, []);
-
+function NetworkAddresses({ addresses }: { addresses?: NetworkAddressesResult | null }) {
   const observedAt = addresses?.snapshot ? addresses.info.observedAt : undefined;
 
   return (
@@ -85,76 +43,56 @@ function NetworkAddresses() {
   );
 }
 
-const PortMappingPage: React.FC = () => {
+function PortMapping({ entry }: { entry: CatalogEntry }) {
+  const category = entry.category ?? "default";
+  const gradient = categoryColors[category] ?? categoryColors.default;
+
+  return (
+    <article className="group flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/50 p-2 transition-colors hover:border-slate-600 sm:gap-4 sm:p-4">
+      {entry.port !== undefined && (
+        <>
+          <div className="w-14 shrink-0 rounded-lg bg-linear-to-r from-slate-700 to-slate-600 py-3 text-center sm:w-28">
+            <div className="mb-1 text-xs text-slate-300">Port</div>
+            <div className="text-lg font-bold text-white sm:text-3xl">{entry.port}</div>
+          </div>
+          <div className={`hidden h-1 w-16 shrink-0 items-center justify-center rounded-full bg-linear-to-r sm:flex ${gradient}`}>
+            <ArrowRight aria-hidden="true" strokeWidth={4} className="h-5 w-5 text-white transition-transform group-hover:translate-x-3" />
+          </div>
+        </>
+      )}
+      <div className={`min-w-0 flex-1 rounded-lg bg-linear-to-r p-3 sm:p-4 ${gradient}`}>
+        <div className="mb-2 flex flex-wrap items-center gap-3">
+          <CatalogIcon icon={entry.icon} fallback="/service-icon.svg" />
+          <h3 className="min-w-0 flex-1 font-bold text-white sm:text-2xl">{entry.title}</h3>
+          <span className="rounded-full bg-black/25 px-2 py-1 text-xs text-white">{category}</span>
+        </div>
+        <p className="mb-2 text-sm text-white/90">{entry.description}</p>
+        <AccessLinks localUrl={entry.localUrl} externalUrl={entry.externalUrl} />
+      </div>
+    </article>
+  );
+}
+
+function PortMappingPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [hoveredPort, setHoveredPort] = useState<number | null>(null);
-
-  const normalizedServices = React.useMemo(() => {
-    return appData.services
-      .map((mapping) => {
-        const category = mapping.category ?? "default";
-        const description = mapping.description ?? defaultDescription;
-        const categoryColor =
-          categoryColors[category] ?? categoryColors["default"];
-
-        return {
-          title: mapping.title,
-          port: mapping.port,
-          url: mapping.url,
-          icon: mapping.icon ?? "",
-          category,
-          description,
-          categoryColor,
-        };
-      })
-      .sort((a, b) => a.port - b.port);
-  }, []);
-
-  const filteredServiceMappings = React.useMemo(() => {
-    const search = searchTerm.toLowerCase();
-    return normalizedServices.filter(
-      (mapping) =>
-        mapping.port.toString().includes(searchTerm) ||
-        mapping.title.toLowerCase().includes(search) ||
-        mapping.description.toLowerCase().includes(search)
-    );
-  }, [searchTerm, normalizedServices]);
-
-  const normalizedProjects = React.useMemo(() => {
-    return appData.projects
-      .filter(
-        (mapping): mapping is typeof mapping & { port: number } =>
-          mapping.port !== undefined
-      )
-      .map((mapping) => {
-        const category = mapping.category ?? "default";
-        const description = mapping.description ?? defaultDescription;
-        const categoryColor =
-          categoryColors[category] ?? categoryColors["default"];
-
-        return {
-          title: mapping.title,
-          port: mapping.port,
-          url: mapping.url,
-          icon: mapping.icon ?? "",
-          category,
-          description,
-          categoryColor,
-        };
-      })
-      .sort((a, b) => a.port - b.port);
-  }, []);
-
-  const filteredProjectMappings = React.useMemo(() => {
-    const search = searchTerm.toLowerCase();
-
-    return normalizedProjects.filter(
-      (mapping) =>
-        mapping.port.toString().includes(searchTerm) ||
-        mapping.title.toLowerCase().includes(search) ||
-        mapping.description.toLowerCase().includes(search)
-    );
-  }, [searchTerm, normalizedProjects]);
+  const addresses = useNetworkAddresses();
+  const network = addresses?.info;
+  const { remoteServices, localServices, projects } = useMemo(() => getAppData(network), [network]);
+  const groups = [
+    { title: "Remote Services", entries: remoteServices },
+    { title: "Local Services", entries: localServices },
+    { title: "Projects", entries: projects.filter((project) => project.port !== undefined) },
+  ];
+  const search = searchTerm.trim().toLowerCase();
+  const matchingGroups = groups.map(({ title, entries }) => ({
+    title,
+    entries: entries.filter((entry) =>
+      [entry.title, entry.description, entry.category, entry.port?.toString(), entry.localUrl, entry.externalUrl]
+        .some((value) => value?.toLowerCase().includes(search)),
+    ).sort((a, b) => (a.port ?? Infinity) - (b.port ?? Infinity)),
+  }));
+  const totalEntries = groups.reduce((total, group) => total + group.entries.length, 0);
+  const matchingEntries = matchingGroups.reduce((total, group) => total + group.entries.length, 0);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
@@ -184,14 +122,15 @@ const PortMappingPage: React.FC = () => {
           </div>
         </div>
 
-        <NetworkAddresses />
+        <NetworkAddresses addresses={addresses} />
 
         {/* Search Bar */}
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
             <input
-              type="text"
+              type="search"
+              aria-label="Search port mappings"
               placeholder="Search by port, service, category, or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -200,250 +139,27 @@ const PortMappingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* separator between services and projects */}
-        <div className="my-10 flex items-center justify-center">
-          <div className="h-px bg-white/10 flex-1" />
-          <span className="px-4 text-sm text-white/70 uppercase tracking-wider">
-            Services
-          </span>
-          <div className="h-px bg-white/10 flex-1" />
-        </div>
-
-        {/* Service Port Mappings - Visual Flow */}
-        <div className="space-y-3">
-          {filteredServiceMappings.map((mapping) => (
-            <div
-              key={mapping.port}
-              className="relative"
-              onMouseEnter={() => setHoveredPort(mapping.port)}
-              onMouseLeave={() => setHoveredPort(null)}
-            >
-              <div className="flex items-center gap-4 bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-4 hover:border-slate-600 transition-all duration-300">
-                {/* Port Section */}
-                <div className="shrink-0 w-32">
-                  <div className="bg-linear-to-r from-slate-700 to-slate-600 rounded-lg p-4 text-center">
-                    <div className="text-xs text-slate-400 mb-1">PORT</div>
-                    <div className="text-3xl font-bold text-white">
-                      {mapping.port}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connection Line */}
-                <div className="shrink-0 relative">
-                  <div
-                    className={`relative h-1 w-16 bg-linear-to-r ${
-                      mapping.categoryColor
-                    } rounded-full transition-all duration-300 ${
-                      hoveredPort === mapping.port ? "w-24" : ""
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-1/2 -translate-y-1/2 transition-all duration-300
-                      ${
-                        hoveredPort === mapping.port
-                          ? "right-0 translate-x-1/2"
-                          : "left-1/2 -translate-x-1/2"
-                      }`}
-                    >
-                      <ArrowRight
-                        strokeWidth={5}
-                        className="w-5 h-5 text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Service Section */}
-                <div className="flex-1 min-w-0">
-                  <div
-                    className={`bg-linear-to-r ${
-                      mapping.categoryColor
-                    } rounded-lg p-4 transition-all duration-300 ${
-                      hoveredPort === mapping.port
-                        ? "shadow-lg scale-[1.02]"
-                        : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        {mapping.icon && (
-                          <img
-                            src={`/${mapping.icon}`}
-                            alt={`${mapping.title} icon`}
-                            className="w-8 h-8"
-                          />
-                        )}
-                        {mapping.url ? (
-                          <a
-                            href={mapping.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-2xl font-bold text-white hover:underline"
-                          >
-                            {mapping.title}
-                          </a>
-                        ) : (
-                          <h3 className="text-2xl font-bold text-white">
-                            {mapping.title}
-                          </h3>
-                        )}
-                      </div>
-                      <span className="text-xs px-3 py-1 bg-white/20 text-white rounded-full">
-                        {mapping.category}
-                      </span>
-                    </div>
-                    <p className="text-sm text-white/90 mb-2">
-                      {mapping.description}
-                    </p>
-                    {mapping.url && (
-                      <a
-                        href={mapping.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-white/70 hover:text-white transition-colors"
-                      >
-                        {mapping.url}
-                      </a>
-                    )}
-                  </div>
-                </div>
+        {matchingGroups.map(({ title, entries }) =>
+          entries.length > 0 && (
+            <section key={title}>
+              <div className="my-10 flex items-center justify-center">
+                <div className="h-px flex-1 bg-white/10" />
+                <h2 className="px-4 text-sm uppercase tracking-wider text-white/70">{title}</h2>
+                <div className="h-px flex-1 bg-white/10" />
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* separator between services and projects */}
-        {filteredProjectMappings.length > 0 && (
-          <div className="my-10 flex items-center justify-center">
-            <div className="h-px bg-white/10 flex-1" />
-            <span className="px-4 text-sm text-white/70 uppercase tracking-wider">
-              Projects
-            </span>
-            <div className="h-px bg-white/10 flex-1" />
-          </div>
+              <div className="space-y-3">
+                {entries.map((entry) => <PortMapping key={entry.id} entry={entry} />)}
+              </div>
+            </section>
+          ),
         )}
 
-        {/* Project Port Mappings - Visual Flow */}
-        <div className="space-y-3">
-          {filteredProjectMappings.map((mapping) => (
-            <div
-              key={mapping.port}
-              className="relative"
-              onMouseEnter={() => setHoveredPort(mapping.port)}
-              onMouseLeave={() => setHoveredPort(null)}
-            >
-              <div className="flex items-center gap-4 bg-slate-800/50 backdrop-blur border border-slate-700 rounded-lg p-4 hover:border-slate-600 transition-all duration-300">
-                {/* Port Section */}
-                <div className="shrink-0 w-32">
-                  <div className="bg-linear-to-r from-slate-700 to-slate-600 rounded-lg p-4 text-center">
-                    <div className="text-xs text-slate-400 mb-1">PORT</div>
-                    <div className="text-3xl font-bold text-white">
-                      {mapping.port}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connection Line */}
-                <div className="shrink-0 relative">
-                  <div
-                    className={`relative h-1 w-16 bg-linear-to-r ${
-                      mapping.categoryColor
-                    } rounded-full transition-all duration-300 ${
-                      hoveredPort === mapping.port ? "w-24" : ""
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-1/2 -translate-y-1/2 transition-all duration-300
-                      ${
-                        hoveredPort === mapping.port
-                          ? "right-0 translate-x-1/2"
-                          : "left-1/2 -translate-x-1/2"
-                      }`}
-                    >
-                      <ArrowRight
-                        strokeWidth={5}
-                        className="w-5 h-5 text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Service Section */}
-                {/* Service Section */}
-                <div className="flex-1 min-w-0">
-                  <div
-                    className={`bg-linear-to-r ${
-                      mapping.categoryColor
-                    } rounded-lg p-4 transition-all duration-300 ${
-                      hoveredPort === mapping.port
-                        ? "shadow-lg scale-[1.02]"
-                        : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        {mapping.icon && (
-                          <img
-                            src={`/${mapping.icon}`}
-                            alt={`${mapping.title} icon`}
-                            className="w-8 h-8"
-                          />
-                        )}
-                        {mapping.url ? (
-                          <a
-                            href={mapping.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-2xl font-bold text-white hover:underline"
-                          >
-                            {mapping.title}
-                          </a>
-                        ) : (
-                          <h3 className="text-2xl font-bold text-white">
-                            {mapping.title}
-                          </h3>
-                        )}
-                      </div>
-                      <span className="text-xs px-3 py-1 bg-white/20 text-white rounded-full">
-                        {mapping.category}
-                      </span>
-                    </div>
-                    <p className="text-sm text-white/90 mb-2">
-                      {mapping.description}
-                    </p>
-                    {mapping.url && (
-                      <a
-                        href={mapping.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-white/70 hover:text-white transition-colors"
-                      >
-                        {mapping.url}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* No Results */}
-        {filteredServiceMappings.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-slate-400 text-lg">
-              No matching ports or services found
-            </p>
-          </div>
+        {matchingEntries === 0 && (
+          <p className="py-12 text-center text-lg text-slate-400">No matching ports or services found</p>
         )}
 
-        {/* Footer */}
-        <div className="mt-8 text-center text-slate-500 text-sm">
-          Showing{" "}
-          {filteredServiceMappings.length + filteredProjectMappings.length} of{" "}
-          {filteredServiceMappings.length + filteredProjectMappings.length} port
-          mappings
+        <div className="mt-8 text-center text-sm text-slate-400">
+          Showing {matchingEntries} of {totalEntries} entries
         </div>
 
         {/* Legend */}
@@ -460,6 +176,6 @@ const PortMappingPage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default PortMappingPage;

@@ -4,280 +4,295 @@
       "id": 1,
       "title": "Jellyfin",
       "description": "Jellyfin is a media streaming service",
-      "url": "http://{host}:8096",
-      "external": "https://github.com/jellyfin/jellyfin",
       "icon": "jellyfin.svg",
       "port": 8096,
-      "category": "systemd"
+      "category": "systemd",
+      "localUrl": "http://{host}:8096",
+      "externalUrl": "https://jellyfin.giraycoskun.dev",
+      "sourceUrl": "https://github.com/jellyfin/jellyfin"
     },
     {
       "id": 2,
       "title": "Wanderer",
       "description": "Trails and maps for hikers and adventurers",
-      "external": "https://github.com/Flomp/wanderer",
-      "url": "http://{host}:3001/",
       "icon": "wanderer.svg",
       "port": 3001,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:3001/",
+      "externalUrl": "https://trails.giraycoskun.dev",
+      "sourceUrl": "https://github.com/Flomp/wanderer"
     },
     {
       "id": 3,
       "title": "Linkding",
       "description": "Bookmark manager",
-      "external": "https://github.com/sissbruecker/linkding",
-      "url": "http://{host}:9091/",
       "icon": "linkding.svg",
       "port": 9091,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:9091/",
+      "sourceUrl": "https://github.com/sissbruecker/linkding"
     },
     {
       "id": 4,
       "title": "Uptime Kuma",
       "description": "Self-hosted monitoring tool",
-      "url": "http://{host}:3002/dashboard",
-      "external": "https://github.com/louislam/uptime-kuma",
       "icon": "uptime-kuma.svg",
       "port": 3002,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:3002/dashboard",
+      "externalUrl": "https://uptime.giraycoskun.dev/status/services",
+      "sourceUrl": "https://github.com/louislam/uptime-kuma"
     },
     {
       "id": 5,
       "title": "Grafana",
       "description": "Self-hosted monitoring tool",
-      "external": "https://github.com/grafana/grafana",
-      "url": "http://{host}:3000/dashboard",
       "icon": "grafana.svg",
       "port": 3000,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:3000/dashboard",
+      "sourceUrl": "https://github.com/grafana/grafana"
     },
     {
       "id": 6,
       "title": "Portrainer",
       "description": "Self-hosted container management tool",
-      "external": "https://github.com/portainer/portainer",
-      "url": "https://{host}:9443",
       "icon": "portainer.svg",
       "port": 9443,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "https://{host}:9443",
+      "sourceUrl": "https://github.com/portainer/portainer"
     },
     {
       "id": 7,
       "title": "Qbittorrent",
       "description": "Torrent client",
-      "external": "https://www.qbittorrent.org/",
-      "url": "http://{host}:8081/",
       "icon": "qBittorrent.svg",
       "port": 8081,
-      "category": "systemd"
+      "category": "systemd",
+      "localUrl": "http://{host}:8081/",
+      "sourceUrl": "https://www.qbittorrent.org/"
     },
     {
       "id": 8,
-      "title": "Bookore",
-      "description": "Self-hosted ebook management application",
-      "external": "https://github.com/booklore-app/booklore",
-      "url": "http://{host}:6060/",
-      "icon": "bookore.svg",
+      "title": "Grimmory",
+      "description": "Self-hosted library for ebooks, comics, and audiobooks.",
+      "icon": "grimmory.png",
       "port": 6060,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:6060/",
+      "externalUrl": "https://library.giraycoskun.dev",
+      "sourceUrl": "https://github.com/grimmory-tools/grimmory"
     },
     {
       "id": 9,
       "title": "Crontab Guru Dashboard",
-      "description": "Self-hosted ebook management application",
-      "external": "https://github.com/booklore-app/booklore",
-      "url": "http://{host}:8084/",
+      "description": "Dashboard for cron schedules.",
       "icon": "crontab-guru.png",
       "port": 8084,
-      "category": "systemd"
+      "category": "systemd",
+      "localUrl": "http://{host}:8084/"
     },
     {
       "id": 10,
       "title": "Traefik",
       "description": "Traefik (pronounced traffic) is a modern HTTP reverse proxy and load balancer",
-      "external": "https://github.com/traefik/traefik",
-      "url": "http://{host}/dashboard/",
       "icon": "traefik.png",
       "port": 80,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}/dashboard/",
+      "sourceUrl": "https://github.com/traefik/traefik"
     },
     {
       "id": 11,
       "title": "Kibana",
       "description": "Kibana is a data visualization and exploration tool used for log and time-series analytics.",
-      "external": "https://github.com/elastic/kibana",
-      "url": "http://{host}:5601/",
       "icon": "kibana.png",
       "port": 5601,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:5601/",
+      "sourceUrl": "https://github.com/elastic/kibana"
     },
     {
       "id": 12,
       "title": "code-server",
       "description": "Runs Visual Studio Code on a remote server and access it through a web browser.",
-      "external": "https://github.com/coder/code-server",
-      "url": "http://{host}:8083/",
       "icon": "code-server.png",
       "port": 8083,
-      "category": "systemd"
+      "category": "systemd",
+      "localUrl": "http://{host}:8083/",
+      "sourceUrl": "https://github.com/coder/code-server"
     },
     {
       "id": 13,
       "title": "audiobookshelf",
       "description": "Self-hosted audiobook and podcast server",
-      "external": "https://github.com/advplyr/audiobookshelf",
-      "url": "http://{host}:13378/",
       "icon": "audiobookshelf.svg",
       "port": 13378,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:13378/",
+      "externalUrl": "https://abs.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/advplyr/audiobookshelf"
     },
     {
       "id": 14,
       "title": "Swiparr",
-      "description": "\"Tinder for Movies\" \u2013 swipe through your library, match with friends in a session, and find something everyone wants to watch.",
-      "external": "https://github.com/m3sserstudi0s/swiparr",
-      "url": "http://{host}:4321/",
+      "description": "\"Tinder for Movies\" – swipe through your library, match with friends in a session, and find something everyone wants to watch.",
       "icon": "swiparr.png",
       "port": 4321,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:4321/",
+      "externalUrl": "https://swiparr.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/m3sserstudi0s/swiparr"
     },
     {
       "id": 15,
       "title": "Karakeep",
       "description": "A self-hostable bookmark-everything app (links, notes and images)",
-      "external": "https://github.com/karakeep-app/karakeep",
-      "url": "http://{host}:3003/",
       "icon": "karakeep.svg",
       "port": 3003,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:3003/",
+      "externalUrl": "https://karakeep.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/karakeep-app/karakeep"
     },
     {
       "id": 16,
       "title": "KitchenOwl",
       "description": "A self-hosted recipe manager and meal planner",
-      "external": "https://github.com/TomBursch/kitchenowl",
-      "url": "http://{host}:8086/",
       "icon": "kitchenowl.png",
       "port": 8086,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:8086/",
+      "externalUrl": "https://kitchenowl.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/TomBursch/kitchenowl"
     },
     {
       "id": 17,
       "title": "Traefik Metrics",
       "description": "Traefik Metrics is the metrics publishing part of Traefik.",
-      "external": "https://github.com/traefik/traefik",
-      "url": "http://{host}:8085/metrics",
       "icon": "traefik.png",
       "port": 8085,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:8085/metrics",
+      "sourceUrl": "https://github.com/traefik/traefik"
     },
     {
       "id": 18,
       "title": "Home Assistant",
       "description": "Home Assistant is an open-source home automation platform that focuses on privacy and local control.",
-      "external": "https://github.com/home-assistant/core",
-      "url": "http://{host}:8123/",
       "icon": "home-assistant.png",
       "port": 8123,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:8123/",
+      "externalUrl": "http://home.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/home-assistant/core"
     },
     {
       "id": 19,
       "title": "Authentik",
       "description": "Identity provider and single sign-on for self-hosted applications.",
-      "url": "http://auth.giraycoskun.dev/",
-      "icon": "service-icon.svg",
+      "icon": "authentik.png",
       "port": 80,
       "category": "docker",
-      "external": "https://goauthentik.io/"
+      "localUrl": "http://auth.giraycoskun.dev/",
+      "externalUrl": "https://auth.giraycoskun.dev/",
+      "sourceUrl": "https://goauthentik.io/"
     },
     {
       "id": 20,
       "title": "Linkwarden",
       "description": "Bookmark manager for collecting and archiving web pages.",
-      "url": "http://{host}:3004/",
-      "icon": "service-icon.svg",
+      "icon": "linkwarden.png",
       "port": 3004,
       "category": "docker",
-      "external": "https://github.com/linkwarden/linkwarden"
+      "localUrl": "http://{host}:3004/",
+      "externalUrl": "https://link.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/linkwarden/linkwarden"
     },
     {
       "id": 21,
       "title": "Openinary",
       "description": "Self-hosted media management and image processing.",
-      "url": "http://{host}:3005/",
-      "icon": "service-icon.svg",
+      "icon": "openinary.svg",
       "port": 3005,
-      "category": "docker"
+      "category": "docker",
+      "localUrl": "http://{host}:3005/",
+      "externalUrl": "https://media.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/openinary/openinary"
     },
     {
       "id": 22,
       "title": "Reactive Resume",
       "description": "Resume builder for creating and sharing resumes.",
-      "url": "https://cv.giraycoskun.dev/",
-      "icon": "service-icon.svg",
+      "icon": "reactive-resume.png",
       "port": 443,
       "category": "docker",
-      "external": "https://github.com/AmruthPillai/Reactive-Resume"
+      "externalUrl": "https://cv.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/AmruthPillai/Reactive-Resume"
     },
     {
       "id": 23,
       "title": "Pi-hole",
       "description": "Network-wide DNS filtering and ad blocking.",
-      "url": "http://pihole.giraycoskun.dev/admin/",
-      "icon": "service-icon.svg",
+      "icon": "pi-hole.png",
       "port": 80,
       "category": "docker",
-      "external": "https://github.com/pi-hole/pi-hole"
+      "localUrl": "http://pihole.giraycoskun.dev/admin/",
+      "externalUrl": "https://pihole.giraycoskun.dev/admin/",
+      "sourceUrl": "https://github.com/pi-hole/pi-hole"
     },
     {
       "id": 24,
       "title": "Open WebUI",
       "description": "Chat interface for locally hosted language models.",
-      "url": "http://chat.giraycoskun.dev/",
-      "icon": "service-icon.svg",
+      "icon": "open-webui.png",
       "port": 80,
       "category": "docker",
-      "external": "https://github.com/open-webui/open-webui"
+      "localUrl": "http://chat.giraycoskun.dev/",
+      "externalUrl": "https://chat.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/open-webui/open-webui"
     },
     {
       "id": 25,
       "title": "Ollama",
       "description": "API for running and interacting with local language models.",
-      "url": "http://ollama.giraycoskun.dev/",
-      "icon": "service-icon.svg",
+      "icon": "ollama.png",
       "port": 80,
       "category": "docker",
-      "external": "https://github.com/ollama/ollama"
+      "localUrl": "http://ollama.giraycoskun.dev/",
+      "externalUrl": "https://ollama.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/ollama/ollama"
     },
     {
       "id": 26,
       "title": "Bazarr",
       "description": "Subtitle management for movies and TV shows.",
-      "url": "http://{host}:6767/",
-      "icon": "service-icon.svg",
+      "icon": "bazarr.png",
       "port": 6767,
       "category": "docker",
-      "external": "https://github.com/morpheus65535/bazarr"
+      "localUrl": "http://{host}:6767/",
+      "sourceUrl": "https://github.com/morpheus65535/bazarr"
     },
     {
       "id": 27,
       "title": "Seerr",
       "description": "Media discovery and requests for the Jellyfin library.",
-      "url": "http://{host}:5055/",
-      "icon": "service-icon.svg",
+      "icon": "seerr.png",
       "port": 5055,
       "category": "docker",
-      "external": "https://github.com/seerr-team/seerr"
+      "localUrl": "http://{host}:5055/",
+      "sourceUrl": "https://github.com/seerr-team/seerr"
     },
     {
       "id": 28,
       "title": "Prometheus",
       "description": "Metrics collection and queries for server monitoring.",
-      "url": "http://{host}:9090/",
-      "icon": "service-icon.svg",
+      "icon": "prometheus.png",
       "port": 9090,
       "category": "docker",
-      "external": "https://github.com/prometheus/prometheus"
+      "localUrl": "http://{host}:9090/",
+      "sourceUrl": "https://github.com/prometheus/prometheus"
     }
   ],
   "projects": [
@@ -285,54 +300,56 @@
       "id": 1,
       "title": "Personal Blog",
       "description": "Personal website and blog for sharing thoughts, projects, and experiences. Built with Astro and hosted via Cloudflare Pages.",
-      "external": "https://github.com/giraycoskun/giraycoskun.com",
-      "url": "https://giraycoskun.com",
-      "icon": "blogging.png"
+      "icon": "blogging.png",
+      "externalUrl": "https://giraycoskun.com",
+      "sourceUrl": "https://github.com/giraycoskun/giraycoskun.com"
     },
     {
       "id": 2,
       "title": "localhost",
       "description": "This server. My home server dashboard `server.giraycoskun.dev` website.",
-      "external": "https://github.com/giraycoskun/server.giraycoskun.dev",
-      "url": "/",
       "category": "nginx",
       "port": 453,
-      "icon": "server.svg"
+      "icon": "server.svg",
+      "localUrl": "/",
+      "externalUrl": "https://server.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/giraycoskun/server.giraycoskun.dev"
     },
     {
       "id": 3,
       "title": "AstroMap",
       "description": "My first coding with AI agents experiment (aka vibe coding). An astrology web application built with Nuxt 3 deployed with Vercel that calculates natal charts and provides AI-powered horoscope interpretations.",
-      "url": "https://astro.giraycoskun.dev/",
       "category": "nuxt",
-      "icon": "astromap.png"
+      "icon": "astromap.png",
+      "externalUrl": "https://astro.giraycoskun.dev/"
     },
     {
       "id": 4,
       "title": "Tally",
       "description": "My custom habit tracker IOS app, because what is one more :) Built with Swift/SwiftUI can be sideloaded with AltStore.",
-      "url": "https://giraycoskun.com/blog/tally/",
-      "external": "https://github.com/giraycoskun/Tally",
       "category": "Swift",
-      "icon": "tally.png"
+      "icon": "tally.png",
+      "externalUrl": "https://giraycoskun.com/blog/tally/",
+      "sourceUrl": "https://github.com/giraycoskun/Tally"
     },
     {
       "id": 5,
       "title": "F1-Board",
       "description": "A Formula 1 prediction game with stats, ML Model Predictions, and insights about the sport.",
-      "url": "https://f1board.giraycoskun.dev/",
-      "external": "https://github.com/giraycoskun/f1-board",
       "category": "nuxt",
-      "icon": "f1-board.png"
+      "icon": "f1-board.png",
+      "externalUrl": "https://f1board.giraycoskun.dev/",
+      "sourceUrl": "https://github.com/giraycoskun/f1-board"
     },
     {
       "id": 6,
       "title": "webhook-server",
       "description": "A simple webhook server built with Python and FastAPI, designed as a personal CI/CD tool to automate tasks and integrate with various services.",
-      "url": "https://{host}:9000/docs",
-      "external": "https://github.com/giraycoskun/webhook-server",
       "category": "Python",
-      "icon": "webhook-server.png"
+      "icon": "fastapi.png",
+      "localUrl": "https://{host}:9000/docs",
+      "externalUrl": "https://webhook.giraycoskun.dev/docs",
+      "sourceUrl": "https://github.com/giraycoskun/webhook-server"
     }
   ]
 }

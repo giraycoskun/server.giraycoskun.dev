@@ -1,6 +1,9 @@
 import { Github, Linkedin, FileText, ExternalLink } from "lucide-react";
-import appData from "./data/data.tsx";
-import { useState, useEffect } from "react";
+import { getAppData, isExternalBuild, needsLocalAddress } from "./data/data.ts";
+import type { CatalogEntry } from "./data/data.ts";
+import { useNetworkAddresses } from "./data/network-addresses.ts";
+import { AccessLinks, CatalogIcon } from "./components/access-links.tsx";
+import { useState, useEffect, useMemo } from "react";
 import {
   checkMultipleUrls,
   getStatusLabel,
@@ -17,21 +20,92 @@ import BashCommandsPage from "./pages/commands.tsx";
 import PortMappingPage from "./pages/ports.tsx";
 import NotFound from "./pages/404.tsx";
 
+function DashboardSection({
+  title,
+  entries,
+  urlStatuses,
+}: {
+  title: string;
+  entries: CatalogEntry[];
+  urlStatuses?: Map<string, boolean>;
+}) {
+  return (
+    <section>
+      <div className="my-10 flex items-center justify-center">
+        <div className="h-px bg-white/10 flex-1" />
+        <h2 className="px-4 text-sm text-white/70 uppercase tracking-wider">{title}</h2>
+        <div className="h-px bg-white/10 flex-1" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
+        {entries.map((entry) => {
+          const primaryUrl = entry.localUrl ?? entry.externalUrl;
+          const showStatus = urlStatuses && primaryUrl;
+          const status = primaryUrl ? urlStatuses?.get(primaryUrl) : undefined;
+          const colors = getStatusColorClasses(status);
+
+          return (
+            <article
+              key={entry.id}
+              className="flex min-w-0 flex-col rounded-2xl border border-white/10 bg-black/35 p-5 backdrop-blur-sm sm:p-6"
+            >
+              <div className="mb-3 flex items-center gap-3">
+                <CatalogIcon
+                  icon={entry.icon}
+                  fallback={urlStatuses ? "/service-icon.svg" : "/default-project.svg"}
+                />
+                <h3 className="flex-1 text-xl font-semibold leading-tight text-white">
+                  {entry.title}
+                </h3>
+                {entry.sourceUrl && (!urlStatuses || !isExternalBuild) && (
+                  <a
+                    href={entry.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${entry.title} project website`}
+                    className="shrink-0 text-white/70 hover:text-white"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
+              </div>
+              <p className="mb-4 text-sm leading-relaxed text-white/90">{entry.description}</p>
+              <div className="mt-auto">
+                <AccessLinks localUrl={entry.localUrl} externalUrl={entry.externalUrl} />
+                {showStatus && (
+                  <span className={`mt-3 inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs text-white ${colors.bg} ${colors.border}`}>
+                    <span className={`h-2 w-2 rounded-full ${colors.dot}`} />
+                    {getStatusLabel(status)}
+                  </span>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function HomeServerLanding() {
   const [urlStatuses, setUrlStatuses] = useState<Map<string, boolean>>(
     new Map(),
   );
 
-  useEffect(() => {
-    // Collect all URLs from services and projects
-    const allUrls = [
-      ...appData.services.map((s) => s.url),
-      ...appData.projects.map((p) => p.url),
-    ];
+  const network = useNetworkAddresses(needsLocalAddress())?.info;
+  const { projects, remoteServices, localServices } = useMemo(() => getAppData(network), [network]);
 
-    // Check all URLs on mount
-    checkMultipleUrls(allUrls).then(setUrlStatuses);
-  }, []);
+  useEffect(() => {
+    const urls = [...remoteServices, ...localServices].flatMap((service) => {
+      const url = service.localUrl ?? service.externalUrl;
+      return url ? [url] : [];
+    });
+    let active = true;
+    void checkMultipleUrls(urls).then((statuses) => {
+      if (active) setUrlStatuses(statuses);
+    });
+    return () => { active = false; };
+  }, [remoteServices, localServices]);
 
   const socialLinks = [
     {
@@ -114,173 +188,9 @@ function HomeServerLanding() {
           </Link>
         </div>
 
-        {/* separator between services and projects */}
-        <div className="my-10 flex items-center justify-center">
-          <div className="h-px bg-white/10 flex-1" />
-          <span className="px-4 text-sm text-white/70 uppercase tracking-wider">
-            Projects
-          </span>
-          <div className="h-px bg-white/10 flex-1" />
-        </div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
-          {appData.projects.map((project) => {
-            return (
-              <div
-                key={project.id}
-                onClick={() => (window.location.href = project.url)}
-                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 h-full cursor-pointer transition-transform duration-200 hover:-translate-y-2"
-              >
-                {/* Card background */}
-                <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
-
-                {/* Shine effect (subtle) */}
-                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
-
-                <div className="relative z-10 h-full flex flex-col">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <img
-                      src={project.icon ?? `/project-icon.svg`}
-                      alt={`${project.title} icon`}
-                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain shrink-0"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          "default-project.svg";
-                      }}
-                    />
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
-                      {project.title}
-                    </h3>
-                    {project.external && (
-                      <a
-                        href={project.external}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-white/70 hover:text-white transition-colors z-20"
-                        title="View external link"
-                      >
-                        <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed mb-3 sm:mb-4 lg:mb-5">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mt-auto">
-                    <a
-                      href={project.url}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
-                      style={{ color: "#ffffff" }}
-                    >
-                      Open Project →
-                    </a>
-                    {/* <span
-                      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`}
-                      />
-                      {statusLabel}
-                    </span> */}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* separator between services and projects */}
-        <div className="flex items-center justify-center my-10">
-          <div className="h-px bg-white/10 flex-1" />
-          <span className="px-4 text-sm text-white/70 uppercase tracking-wider">
-            Services
-          </span>
-          <div className="h-px bg-white/10 flex-1" />
-        </div>
-
-        {/* Service Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
-          {appData.services.map((service) => {
-            const isRunning = urlStatuses.get(service.url);
-            const statusColors = getStatusColorClasses(isRunning);
-            const statusLabel = getStatusLabel(isRunning);
-
-            return (
-              <div
-                key={service.id}
-                onClick={() => (window.location.href = service.url)}
-                className="relative overflow-hidden group rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 h-full cursor-pointer transition-transform duration-200 hover:-translate-y-2"
-              >
-                {/* Card background */}
-                <div className="absolute inset-0 bg-black/35 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl pointer-events-none" />
-
-                {/* Shine effect (subtle) */}
-                <div className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white/5 to-transparent" />
-
-                <div className="relative z-10 h-full flex flex-col">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <img
-                      src={service.icon ?? `/service-icon.svg`}
-                      alt={`${service.title} icon`}
-                      className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 rounded-sm object-contain shrink-0"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          "/icons/default-project.svg";
-                      }}
-                    />
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white leading-tight flex-1">
-                      {service.title}
-                    </h3>
-                    {service.external && (
-                      <a
-                        href={service.external}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-white/70 hover:text-white transition-colors z-20"
-                        title="View external link"
-                      >
-                        <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="text-white/90 text-xs sm:text-sm lg:text-base leading-relaxed mb-3 sm:mb-4 lg:mb-5">
-                    {service.description}
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mt-auto">
-                    <a
-                      href={service.url}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-block px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-white/25 rounded-full text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-white/35 hover:scale-105 relative z-10 whitespace-nowrap"
-                      style={{ color: "#ffffff" }}
-                    >
-                      Open Service →
-                    </a>
-                    <span
-                      className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 ${statusColors.bg} border ${statusColors.border} rounded-full text-xs sm:text-sm text-white whitespace-nowrap`}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full ${statusColors.dot} block shrink-0`}
-                      />
-                      {statusLabel}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* separator between projects and footer
-        <div className="my-10 flex items-center justify-center">
-          <div className="h-px bg-white/10 flex-1" />
-          <div className="h-px bg-white/10 flex-1" />
-        </div> */}
+        <DashboardSection title="Projects" entries={projects} />
+        <DashboardSection title="Remote Services" entries={remoteServices} urlStatuses={urlStatuses} />
+        <DashboardSection title="Local Services" entries={localServices} urlStatuses={urlStatuses} />
       </div>
 
       <style>{`

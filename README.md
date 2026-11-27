@@ -9,7 +9,7 @@
 > - Live service reachability badges with `Running`, `Offline`, and `Waiting` states
 > - Searchable **Port Mapper** view at `/ports`
 > - Searchable **Bash Commands Reference** view at `/commands`
-> - Separate local and external builds backed by different JSON datasets
+> - Remote Services and Local Services in both builds, backed by a shared service catalog
 > - Lightweight deployment pipeline using GitHub webhooks, Express, `systemd`, and Nginx
 > - Nginx routing that serves `dist-local` or `dist-external` based on request origin
 
@@ -17,28 +17,21 @@
 
 `server.giraycoskun.dev` is a React + Vite + TypeScript dashboard for a home server. It exposes self-hosted services, personal projects, utility pages, and a small deployment webhook used to rebuild the site after GitHub pushes.
 
-The frontend currently uses:
-
-- `src/data/data-local.json` for the local-network version
-- `src/data/data-external.json` for the public version
-
-Current content snapshot:
-
-- Local build: 28 services and 6 projects
-- External build: 16 services and 6 projects
-- Main routes: `/`, `/ports`, `/commands`
+The shared `src/data/catalog.json` contains 16 remote services, 12 local services, and 6 projects. Services with an `externalUrl` appear under Remote Services. The local-network build shows the configured local and external URLs. The public build shows external access links and displays Local Services as an unlinked inventory.
 
 ## Docker service URLs
 
-Dashboard entries follow the Compose ports and active Traefik routing rules in `/home/giraycoskun/docker`. Local-only apps (Bazarr, Seerr, and Prometheus) appear only in the local dataset. Background workers such as ShelfBridge and Lettarrboxd have no configured web interface and are omitted.
+Dashboard entries follow the Compose ports and active Traefik routing rules in `/home/giraycoskun/docker`. Background workers such as ShelfBridge and Lettarrboxd are omitted because they have no web interface.
 
 Open WebUI, Ollama, and Pi-hole do not publish web ports on the host. Their local links use HTTP hostnames through Traefik on port 80; local DNS must resolve those hostnames to the server. Authentik also uses its Traefik hostname locally to avoid the port 9001 conflict with Cronitor. External links use HTTPS hostnames; a configured Traefik route does not by itself verify public DNS or tunnel availability.
 
-Direct links in the local dataset use `{host}` for the server address. By default, the dashboard uses the hostname or IP from the browser's URL. Open it through a LAN DNS name on your home network or through the server's [Tailscale MagicDNS name](https://tailscale.com/docs/features/magicdns) on your tailnet. A router DHCP reservation can also keep the LAN address stable.
+Direct local links use `{host}` for the server address. If you open the dashboard by IP, direct links use that IP. For a DNS name, they use the detected LAN IP or, for a [Tailscale MagicDNS](https://tailscale.com/docs/features/magicdns) `.ts.net` name, the detected Tailscale IP. If address detection is unavailable, the links use the dashboard hostname.
 
 If the dashboard address and direct service address differ, set `VITE_LOCAL_HOST` to the service hostname or IP in `.env.local` and rebuild the local bundle. Use a hostname without a scheme, port, or path. For example, set it to the server's MagicDNS name if every local dashboard client uses Tailscale. HTTPS endpoints still require a certificate valid for the hostname you use.
 
-Reactive Resume uses `https://cv.giraycoskun.dev/` in both datasets. Its Compose mapping requests host port 3000, which is currently occupied by Grafana, so a direct local port link would open the wrong app. Its port entry is 443 to match the dashboard link. Resolve the deployment conflict before expecting the resume service to be reachable.
+Reactive Resume uses `https://cv.giraycoskun.dev/` in both builds. Grafana occupies the host port requested by Reactive Resume's Compose mapping, so the dashboard lists its HTTPS route on port 443.
+
+Grimmory uses its [upstream icon](https://github.com/grimmory-tools/grimmory/tree/develop/frontend/public/icons), Openinary uses its [upstream logo](https://github.com/openinary/openinary), and the other added icons come from [Dashboard Icons](https://github.com/homarr-labs/dashboard-icons). The webhook project uses the FastAPI icon.
 
 ## Tech Stack
 
@@ -95,7 +88,7 @@ pnpm dev
 
 ## Environment Setup
 
-The frontend chooses its data source using `VITE_ENV`.
+Vite uses `VITE_ENV` to select which addresses to include from the shared catalog.
 
 `.env.local`
 
@@ -123,9 +116,8 @@ The webhook server also needs runtime secrets and deployment credentials. Provid
 | `src/App.tsx` | Main router and landing page |
 | `src/pages/ports.tsx` | Port Mapper page |
 | `src/pages/commands.tsx` | Bash Commands Reference page |
-| `src/data/data.tsx` | Loads environment-specific JSON data |
-| `src/data/data-local.json` | Local-network services and projects |
-| `src/data/data-external.json` | Public-facing services and projects |
+| `src/data/data.ts` | Resolves local addresses and groups services |
+| `src/data/catalog.json` | Shared catalog of services and projects |
 | `src/util/check.tsx` | Client-side URL reachability checks |
 | `src/server/webhook.tsx` | Express webhook listener |
 | `src/server/build.sh` | Deployment build script |
@@ -142,9 +134,9 @@ At runtime:
 
 1. Nginx classifies the request as local or external.
 2. It maps the request to the correct build directory.
-3. The frontend loads the matching JSON dataset through `src/data/data.tsx`.
+3. The frontend renders the shared catalog with the addresses included in that build.
 
-This allows the public site to expose a reduced set of services while keeping the local dashboard more complete.
+Vite omits local URLs and local-only ports from the public bundle. Both builds display Remote Services and Local Services on the home page and Port Mapper.
 
 Both versions of `/ports` show the server's LAN and Tailscale IPv4 addresses plus its public egress IPv4. The public build also publishes these addresses in `network-info.json`. Build on the server so the snapshot reflects its network. The page tries the live endpoint first and displays the build snapshot with its timestamp when the live endpoint is unavailable. The server looks up its public IPv4 through [ipify](https://www.ipify.org/) and caches live lookups for one minute.
 
